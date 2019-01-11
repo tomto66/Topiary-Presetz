@@ -1,4 +1,4 @@
-//////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
 /*
 This file is part of Topiary Presetz, Copyright Tom Tollenaere 2018-2019.
 
@@ -17,6 +17,7 @@ along with Topiary Presetz. If not, see <https://www.gnu.org/licenses/>.
 */
 /////////////////////////////////////////////////////////////////////////////
 
-#pragma once
-#include "TopiaryPresetzAutomationComponent.h"
-#include "../../Topiary/Source/TopiaryAutomationComponent.cpp"
+#include "PresetzPluginProcessor.h"
+#include "PresetzPluginEditor.h"
+#include "../../Topiary/Source/PluginProcessor.cpp"
+

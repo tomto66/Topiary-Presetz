@@ -22,7 +22,6 @@ along with Topiary Presetz. If not, see <https://www.gnu.org/licenses/>.
 
 // following has std model code that can be included (cannot be in TopiaryModel because of variable definitions)
 #define TOPIARYMODEL TopiaryPresetzModel
-#define PRESETZ
 #include"../../Topiary/Source/TopiaryModelIncludes.cpp"
 
 void TopiaryPresetzModel::saveStateToMemoryBlock(MemoryBlock& destData)
@@ -318,7 +317,7 @@ TopiaryPresetzModel::~TopiaryPresetzModel()
 } //~TopiaryPresetzModel
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-
+/* moved to modelIncludes
 void TopiaryPresetzModel::getVariationDetailForGenerateMidi(XmlElement** parent, XmlElement** noteChild, int& parentLength, bool& ending, bool& ended)
 {
 	parentLength = variation[variationRunning].lenInTicks;
@@ -328,7 +327,7 @@ void TopiaryPresetzModel::getVariationDetailForGenerateMidi(XmlElement** parent,
 	*noteChild = variation[variationRunning].currentPatternChild;
 
 } // getVariationDetailForGenerateMidi
-
+*/
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void TopiaryPresetzModel::setRTValue(int p, int value, int channel, int CC)
@@ -538,7 +537,7 @@ void TopiaryPresetzModel::setVariation(int n)
 } // setVariation
 
 ///////////////////////////////////////////////////////////////////////
-
+/* move to modelIncludes
 void TopiaryPresetzModel::getVariationEnables(bool enables[8])
 {
 	for (int i = 0; i < 8; i++)
@@ -561,14 +560,16 @@ bool TopiaryPresetzModel::getVariationEnabled(int v)
 	return variation[v].enabled;
 	
 } // getVariationEnabled
-
+*/
 ///////////////////////////////////////////////////////////////////////
 
 void TopiaryPresetzModel::initializeVariationsForRunning()
 {
+	// careful; this code is different in various plugins - don't think it's generic!!!
 	for (int v = 0; v < 8; v++)
 	{
 		variation[v].ended = true;
+		variation[v].currentPatternChild = nullptr;
 	}
 } // initializeVariationsForRunning
 

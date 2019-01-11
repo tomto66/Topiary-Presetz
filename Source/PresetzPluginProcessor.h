@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////
 /*
-This file is part of Topiary Presetz, Copyright Tom Tollenaere 2018-2019.
+This file is part of Topiary Presetz, Copyright Tom Tollenaere 2018-19.
 
 Topiary Presetz is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -18,5 +18,11 @@ along with Topiary Presetz. If not, see <https://www.gnu.org/licenses/>.
 /////////////////////////////////////////////////////////////////////////////
 
 #pragma once
-#include "TopiaryPresetzAutomationComponent.h"
-#include "../../Topiary/Source/TopiaryAutomationComponent.cpp"
+
+#include "../JuceLibraryCode/JuceHeader.h"
+#include "TopiaryPresetzModel.h" 
+#define TOPIARYMODEL TopiaryPresetzModel
+#define TOPIARYEDITORCOMPONENTS TopiaryPresetzComponent
+
+#include "../../Topiary/Source/PluginProcessor.h"
+

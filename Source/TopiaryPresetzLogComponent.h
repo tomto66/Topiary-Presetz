@@ -23,4 +23,3 @@ along with Topiary Presetz. If not, see <https://www.gnu.org/licenses/>.
 #define TOPIARYLOGCOMPONENT TopiaryPresetzLogComponent
 #include "../../Topiary/Source/TopiaryLogComponent.h"
 
-/////////////////////////////////////////////////////////////////////

@@ -20,5 +20,3 @@ along with Topiary Presetz. If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #include "TopiaryPresetzRealTimeComponent.h"
 #include "../../Topiary/Source/TopiaryRealTimeComponent.cpp"
-
-/////////////////////////////////////////////////////////////////////////

@@ -20,7 +20,7 @@ along with Topiary Presetz. If not, see <https://www.gnu.org/licenses/>.
 
 #pragma once
 #include "../../Topiary/Source/TopiaryModel.h"
-
+#define PRESETZ
 
 class TopiaryPresetzModel : public TopiaryModel 
 {
@@ -94,10 +94,7 @@ protected:
 	PresetElementDefinition presetDefinition[PRESETELEMENTS];		// the definitions
 
 	int presetRTValue[PRESETELEMENTS];								// the actual realtime values of where we are in real time (not stored in the presets nor the variations0
-
-	int transitioningFrom = -1;  // set when we are generating
-	int transitioningTo = -1;
-	
+			
 	///////////////////////////////////////////////////////////////////////
 
 	void generateTransition(int p, int v, XmlElement *transition, int length)
