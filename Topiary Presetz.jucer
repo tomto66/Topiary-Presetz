@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<JUCERPROJECT id="so1YrE" name="Topiary Presetz" projectType="audioplug" jucerVersion="5.3.2"
+              version="0.9.0" companyName="Topiary" pluginManufacturer="Topiary"
+              pluginVSTCategory="kPlugCategGenerator" pluginManufacturerCode="Tpry"
+              pluginCode="Tpry" pluginCharacteristicsValue="pluginIsMidiEffectPlugin,pluginIsSynth,pluginProducesMidiOut,pluginWantsMidiIn"
+              splashScreenColour="Light" pluginFormats="buildStandalone,buildVST"
+              pluginVST3Category="Fx,Generator">
+  <MAINGROUP id="MiVGXn" name="Topiary Presetz">
+    <GROUP id="{D5BC8FF7-D48D-665F-7CA5-E964EDAA0535}" name="Source">
+      <FILE id="sWL4dd" name="TopiaryPresetzVariationChildren.cpp" compile="1"
+            resource="0" file="Source/TopiaryPresetzVariationChildren.cpp"/>
+      <FILE id="xltYoY" name="TopiaryPresetzVariationChildren.h" compile="0"
+            resource="0" file="Source/TopiaryPresetzVariationChildren.h"/>
+      <FILE id="d0qcHT" name="TopiaryPresetzMasterComponent.cpp" compile="1"
+            resource="0" file="Source/TopiaryPresetzMasterComponent.cpp"/>
+      <FILE id="QbkOsd" name="TopiaryPresetzMasterComponent.h" compile="0"
+            resource="0" file="Source/TopiaryPresetzMasterComponent.h"/>
+      <FILE id="S8FizM" name="TopiaryPresetzRealTimeComponent.cpp" compile="1"
+            resource="0" file="Source/TopiaryPresetzRealTimeComponent.cpp"/>
+      <FILE id="upjgWm" name="TopiaryPresetzRealTimeComponent.h" compile="0"
+            resource="0" file="Source/TopiaryPresetzRealTimeComponent.h"/>
+      <FILE id="gn8Hnb" name="topiary _presetz_logo_7.png" compile="0" resource="1"
+            file="resources/topiary _presetz_logo_7.png"/>
+      <FILE id="xhqjmO" name="PresetzPluginProcessor.cpp" compile="1" resource="0"
+            file="Source/PresetzPluginProcessor.cpp"/>
+      <FILE id="fuukxd" name="PresetzPluginProcessor.h" compile="0" resource="0"
+            file="Source/PresetzPluginProcessor.h"/>
+      <FILE id="ukbHgb" name="TopiaryPresetzTransportComponent.cpp" compile="1"
+            resource="0" file="Source/TopiaryPresetzTransportComponent.cpp"/>
+      <FILE id="g3qdrr" name="TopiaryPresetzTransportComponent.h" compile="0"
+            resource="0" file="Source/TopiaryPresetzTransportComponent.h"/>
+      <FILE id="FpnLpq" name="TopiaryPresetzVariationButtonsComponent.cpp"
+            compile="1" resource="0" file="Source/TopiaryPresetzVariationButtonsComponent.cpp"/>
+      <FILE id="S1HumD" name="TopiaryPresetzVariationButtonsComponent.h"
+            compile="0" resource="0" file="Source/TopiaryPresetzVariationButtonsComponent.h"/>
+      <FILE id="YUZfIZ" name="TopiaryPresetzHeaderComponent.cpp" compile="1"
+            resource="0" file="Source/TopiaryPresetzHeaderComponent.cpp"/>
+      <FILE id="bahm8j" name="TopiaryPresetzAutomationComponent.cpp" compile="1"
+            resource="0" file="Source/TopiaryPresetzAutomationComponent.cpp"/>
+      <FILE id="NyKoxU" name="TopiaryPresetzAutomationComponent.h" compile="0"
+            resource="0" file="Source/TopiaryPresetzAutomationComponent.h"/>
+      <FILE id="KmOJGE" name="TopiaryPresetzLogComponent.cpp" compile="1"
+            resource="0" file="Source/TopiaryPresetzLogComponent.cpp"/>
+      <FILE id="NIg9QM" name="TopiaryPresetzLogComponent.h" compile="0" resource="0"
+            file="Source/TopiaryPresetzLogComponent.h"/>
+      <FILE id="rVw5Cl" name="TopiaryPresetzTabbedComponent.cpp" compile="1"
+            resource="0" file="Source/TopiaryPresetzTabbedComponent.cpp"/>
+      <FILE id="TBVRZI" name="TopiaryPresetzTabbedComponent.h" compile="0"
+            resource="0" file="Source/TopiaryPresetzTabbedComponent.h"/>
+      <FILE id="Bh1Gzt" name="TopiaryPresetzComponent.cpp" compile="1" resource="0"
+            file="Source/TopiaryPresetzComponent.cpp"/>
+      <FILE id="OtniiZ" name="TopiaryPresetzComponent.h" compile="0" resource="0"
+            file="Source/TopiaryPresetzComponent.h"/>
+      <FILE id="WipsMI" name="TopiaryPresetzHeaderComponent.h" compile="0"
+            resource="0" file="Source/TopiaryPresetzHeaderComponent.h"/>
+      <FILE id="EoYSzV" name="TopiaryPresetzModel.cpp" compile="1" resource="0"
+            file="Source/TopiaryPresetzModel.cpp"/>
+      <FILE id="PJKM6j" name="TopiaryPresetzModel.h" compile="0" resource="0"
+            file="Source/TopiaryPresetzModel.h"/>
+      <FILE id="Fq1A3d" name="PresetzPluginEditor.cpp" compile="1" resource="0"
+            file="Source/PresetzPluginEditor.cpp"/>
+      <FILE id="h7GfMZ" name="PresetzPluginEditor.h" compile="0" resource="0"
+            file="Source/PresetzPluginEditor.h"/>
+    </GROUP>
+    <FILE id="SJfEY3" name="BinaryData.cpp" compile="1" resource="0" file="JuceLibraryCode/BinaryData.cpp"/>
+    <FILE id="ipOmti" name="BinaryData.h" compile="0" resource="0" file="JuceLibraryCode/BinaryData.h"/>
+    <FILE id="HBRQe4" name="PluginEditor.cpp" compile="1" resource="0"
+          file="../Topiary/Source/PluginEditor.cpp"/>
+    <FILE id="JAahm1" name="PluginEditor.h" compile="0" resource="0" file="../Topiary/Source/PluginEditor.h"/>
+    <FILE id="dKGtrx" name="PluginProcessor.cpp" compile="1" resource="0"
+          file="../Topiary/Source/PluginProcessor.cpp"/>
+    <FILE id="hqQQAM" name="PluginProcessor.h" compile="0" resource="0"
+          file="../Topiary/Source/PluginProcessor.h"/>
+    <FILE id="C2qdKP" name="Topiary.cpp" compile="1" resource="0" file="../Topiary/Source/Topiary.cpp"/>
+    <FILE id="CO0GaG" name="Topiary.h" compile="0" resource="0" file="../Topiary/Source/Topiary.h"/>
+    <FILE id="QdWBA2" name="TopiaryAutomationComponent.cpp" compile="1"
+          resource="0" file="../Topiary/Source/TopiaryAutomationComponent.cpp"/>
+    <FILE id="MxPWpg" name="TopiaryAutomationComponent.h" compile="0" resource="0"
+          file="../Topiary/Source/TopiaryAutomationComponent.h"/>
+    <FILE id="hXo1Hl" name="TopiaryLogComponent.cpp" compile="1" resource="0"
+          file="../Topiary/Source/TopiaryLogComponent.cpp"/>
+    <FILE id="cMRCMb" name="TopiaryLogComponent.h" compile="0" resource="0"
+          file="../Topiary/Source/TopiaryLogComponent.h"/>
+    <FILE id="cLiC1v" name="TopiaryModel.cpp" compile="1" resource="0"
+          file="../Topiary/Source/TopiaryModel.cpp"/>
+    <FILE id="gqDwmi" name="TopiaryModel.h" compile="0" resource="0" file="../Topiary/Source/TopiaryModel.h"/>
+    <FILE id="BIOKZq" name="TopiaryModelIncludes.cpp" compile="1" resource="0"
+          file="../Topiary/Source/TopiaryModelIncludes.cpp"/>
+    <FILE id="Ci0hNq" name="TopiaryRealTimeComponent.cpp" compile="1" resource="0"
+          file="../Topiary/Source/TopiaryRealTimeComponent.cpp"/>
+    <FILE id="S1sjH2" name="TopiaryRealTimeComponent.h" compile="0" resource="0"
+          file="../Topiary/Source/TopiaryRealTimeComponent.h"/>
+    <FILE id="sEuQqY" name="TopiaryTable.cpp" compile="1" resource="0"
+          file="../Topiary/Source/TopiaryTable.cpp"/>
+    <FILE id="TeId1a" name="TopiaryTable.h" compile="0" resource="0" file="../Topiary/Source/TopiaryTable.h"/>
+    <FILE id="c7GnKn" name="TopiaryThread.cpp" compile="1" resource="0"
+          file="../Topiary/Source/TopiaryThread.cpp"/>
+    <FILE id="arEHnQ" name="TopiaryThread.h" compile="0" resource="0" file="../Topiary/Source/TopiaryThread.h"/>
+    <FILE id="gEXgLd" name="TopiaryTransportComponent.cpp" compile="1"
+          resource="0" file="../Topiary/Source/TopiaryTransportComponent.cpp"/>
+    <FILE id="CgOZUP" name="TopiaryTransportComponent.h" compile="0" resource="0"
+          file="../Topiary/Source/TopiaryTransportComponent.h"/>
+    <FILE id="fcSOB7" name="TopiaryVariationButtonsComponent.cpp" compile="1"
+          resource="0" file="../Topiary/Source/TopiaryVariationButtonsComponent.cpp"/>
+    <FILE id="UOSCJ1" name="TopiaryVariationButtonsComponent.h" compile="0"
+          resource="0" file="../Topiary/Source/TopiaryVariationButtonsComponent.h"/>
+  </MAINGROUP>
+  <EXPORTFORMATS>
+    <VS2017 targetFolder="Builds/VisualStudio2017" windowsTargetPlatformVersion="10.0.17134.0">
+      <CONFIGURATIONS>
+        <CONFIGURATION isDebug="1" name="Debug" useRuntimeLibDLL="0"/>
+        <CONFIGURATION isDebug="0" name="Release"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_core" path="../JUCE/modules"/>
+        <MODULEPATH id="juce_events" path="../JUCE/modules"/>
+        <MODULEPATH id="juce_graphics" path="../JUCE/modules"/>
+        <MODULEPATH id="juce_data_structures" path="../JUCE/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="../JUCE/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_basics" path="../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_devices" path="../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_formats" path="../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_processors" path="../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_plugin_client" path="../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_utils" path="../JUCE/modules"/>
+        <MODULEPATH id="juce_opengl" path="../JUCE/modules"/>
+      </MODULEPATHS>
+    </VS2017>
+  </EXPORTFORMATS>
+  <MODULES>
+    <MODULE id="juce_audio_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_audio_devices" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_audio_formats" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_audio_plugin_client" showAllCode="1" useLocalCopy="0"
+            useGlobalPath="0"/>
+    <MODULE id="juce_audio_processors" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_audio_utils" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_core" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_data_structures" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_events" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_graphics" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_gui_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_gui_extra" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_opengl" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+  </MODULES>
+  <LIVE_SETTINGS>
+    <WINDOWS/>
+  </LIVE_SETTINGS>
+  <JUCEOPTIONS/>
+</JUCERPROJECT>

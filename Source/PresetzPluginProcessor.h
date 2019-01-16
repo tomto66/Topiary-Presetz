@@ -18,7 +18,6 @@ along with Topiary Presetz. If not, see <https://www.gnu.org/licenses/>.
 /////////////////////////////////////////////////////////////////////////////
 
 #pragma once
-
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "TopiaryPresetzModel.h" 
 #define TOPIARYMODEL TopiaryPresetzModel

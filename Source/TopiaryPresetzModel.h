@@ -28,8 +28,8 @@ public:
 	TopiaryPresetzModel();
 	~TopiaryPresetzModel();
 		
-	void savePreset(File f) override;
-	void loadPreset(File f) override;
+	//void savePreset(File f) override;
+	//void loadPreset(File f) override;
 	void saveStateToMemoryBlock(MemoryBlock& destData) override;
 	void restoreStateFromMemoryBlock(const void* data, int sizeInBytes) override;
 	bool processVariationSwitch() override;

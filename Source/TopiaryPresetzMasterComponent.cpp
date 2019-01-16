@@ -88,18 +88,7 @@ TopiaryPresetzMasterComponent::TopiaryPresetzMasterComponent()
 	saveButton.setButtonText("Save");
 	saveButton.onClick = [this]
 	{
-		FileChooser myChooser("Please select Topiay Presetz file to load...",
-			File::getSpecialLocation(File::userHomeDirectory),
-			"*.tbe");
-		if (myChooser.browseForFileToSave(true))
-		{
-			auto f = myChooser.getResult();
-			presetzModel->savePreset(f);
-			return;
-		}
-		else
-		{ // file not found or not opened
-		}
+		presetzModel->savePreset("Please select Topiay Presetz file to load...", "*.tpr");
 	};
 	
 	addAndMakeVisible(loadButton);
@@ -107,21 +96,9 @@ TopiaryPresetzMasterComponent::TopiaryPresetzMasterComponent()
 	loadButton.setButtonText("Load");
 	loadButton.onClick = [this]
 	{
-		FileChooser myChooser("Please select Topiary Presetz file to load...",
-			File::getSpecialLocation(File::userHomeDirectory),
-			"*.tbe");
-		if (myChooser.browseForFileToOpen())
-		{
-			auto f = myChooser.getResult();
-			presetzModel->loadPreset(f);
+			presetzModel->loadPreset("Please select Topiary Presetz file to load...", "*.tpr");
 			setModel(presetzModel);
-			getSettings();
-			
-			return;
-		}
-		else
-		{ // file not found or not opened
-		}
+			getSettings();			
 	};
 
 	addAndMakeVisible(nameEditor);

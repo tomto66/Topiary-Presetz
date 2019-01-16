@@ -221,11 +221,15 @@ along with Topiary Presetz. If not, see <https://www.gnu.org/licenses/>.
 		valueFromEditor.onFocusLost = [this]
 		{
 			parent->setPresetElementData(index);
+			//presetSlider.setRange(valueFromEditor.getText().getIntValue(), valueToEditor.getText().getIntValue(),1);
+			//RTSlider.setRange(valueFromEditor.getText().getIntValue(), valueToEditor.getText().getIntValue(),1);
 		};
 
 		valueFromEditor.onReturnKey = [this]
 		{
 			parent->setPresetElementData(index);
+			//presetSlider.setRange(valueFromEditor.getText().getIntValue(), valueToEditor.getText().getIntValue(),1);
+			//RTSlider.setRange(valueFromEditor.getText().getIntValue(), valueToEditor.getText().getIntValue(),1);
 		};
 
 		addAndMakeVisible(valueToEditor);
@@ -233,11 +237,15 @@ along with Topiary Presetz. If not, see <https://www.gnu.org/licenses/>.
 		valueToEditor.onFocusLost = [this]
 		{
 			parent->setPresetElementData(index);
+			//presetSlider.setRange(valueFromEditor.getText().getIntValue(), valueToEditor.getText().getIntValue(),1);
+			//RTSlider.setRange(valueFromEditor.getText().getIntValue(), valueToEditor.getText().getIntValue(),1);
 		};
 
 		valueToEditor.onReturnKey = [this]
 		{
 			parent->setPresetElementData(index);
+			//presetSlider.setRange(valueFromEditor.getText().getIntValue(), valueToEditor.getText().getIntValue(),1);
+			//RTSlider.setRange(valueFromEditor.getText().getIntValue(), valueToEditor.getText().getIntValue(),1);
 		};
 
 		addAndMakeVisible(enableButton);

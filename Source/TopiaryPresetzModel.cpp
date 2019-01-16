@@ -104,12 +104,13 @@ void TopiaryPresetzModel::addParametersToModel()
 } // addParametersToModel
 
 /////////////////////////////////////////////////////////////////////////
-
+/*if (filePath.compare("") == 0)
+		directory = File::File(filePath);
 void TopiaryPresetzModel::savePreset(File f)
 {
 	addParametersToModel();  // this adds and XML element "Parameters" to the model
-	String myXmlDoc = model->createDocument(String());
-	f.replaceWithText(myXmlDoc);
+	//String myXmlDoc = model->createDocument(String());
+	//f.replaceWithText(myXmlDoc);
 	//Logger::writeToLog(myXmlDoc);
 
 	// now delete the no-longer-needed "Parameters" child
@@ -124,7 +125,7 @@ void TopiaryPresetzModel::loadPreset(File f)
 	model.reset(XmlDocument::parse(f));
 	restoreParametersToModel();
 } // loadPreset
-
+*/
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void TopiaryPresetzModel::restoreParametersToModel()
@@ -361,19 +362,19 @@ void TopiaryPresetzModel::processCC(MidiMessage& msg, MidiBuffer* midiBuffer) //
 	// check if the CC number is one of the enabled RT controllers; if so check from/to, update the RTvalue and send msg to the preset to update the slider
 	// then send out the midimessage according to the preset definition
 	
-	//int outCCs[PRESETELEMENTS]; // keep track of which CCs we processed
-
 	for(int i=0; i<PRESETELEMENTS; i++)
 	{
 		if (presetDefinition[i].enabled)
 			if ((presetDefinition[i].inCC == msg.getControllerNumber()) && ((presetDefinition[i].inChannel == 0) || (presetDefinition[i].inChannel == msg.getChannel())))
 			{
 				int value = msg.getControllerValue();
-				if ((value >= presetDefinition[i].fromValue) && (value <= presetDefinition[i].toValue))
-				{
-					presetRTValue[i] = value;
-					broadcaster.sendActionMessage(MsgRealTimeParameter);
-				}
+				// recalculate value based on from/to values (interpolate)
+
+				value = (int)(presetDefinition[i].fromValue + (value * (presetDefinition[i].toValue - presetDefinition[i].fromValue + 1) / 128));
+				
+				presetRTValue[i] = value;
+				broadcaster.sendActionMessage(MsgRealTimeParameter);
+				
 				
 				auto outmsg = MidiMessage::controllerEvent(presetDefinition[i].outChannel, presetDefinition[i].outCC, presetRTValue[i]);
 				midiBuffer->addEvent(outmsg, (int) msg.getTimeStamp());
@@ -389,8 +390,6 @@ void TopiaryPresetzModel::processCC(MidiMessage& msg)  // this version to be cal
 {
 	// do the realtime CC processing, called by generateMidi
 	// check if the CC number is one of the enabled RT controllers; if so check from/to, update the RTvalue and send msg to the preset to update the slider
-
-	//int outCCs[PRESETELEMENTS]; // keep track of which CCs we processed
 
 	for (int i = 0; i < PRESETELEMENTS; i++)
 	{
@@ -441,8 +440,9 @@ void TopiaryPresetzModel::setPresetDefinition(int p, String pname, int fromValue
 		presetDefinition[p].outChannel = outChannel;
 		presetDefinition[p].enabled = enabled;
 		Log("Preset " + String(p+1) + " saved.", Topiary::LogType::Info);
+		// generateTransition();
 	}
-	generateTransition(); 
+	
 
 } // setPresetDefinition
 
@@ -519,7 +519,8 @@ void TopiaryPresetzModel::setVariation(int n)
 	jassert(n >= 0);
 	const GenericScopedLock<SpinLock> myScopedLock(lockModel);
 
-	if (n != variationSelected)
+	if ((n != variationSelected) || (runState == Topiary::Stopped))
+		// the || runState || is needed because we may need to re-set a waiting variation to non-waiting; in that case we want the update to happen otherwise the buttons stays orange
 		if (variation[n].enabled)
 		{
 			variationSelected = n;
@@ -537,31 +538,6 @@ void TopiaryPresetzModel::setVariation(int n)
 } // setVariation
 
 ///////////////////////////////////////////////////////////////////////
-/* move to modelIncludes
-void TopiaryPresetzModel::getVariationEnables(bool enables[8])
-{
-	for (int i = 0; i < 8; i++)
-		enables[i] = variation[i].enabled;
-
-} // getVariationEnables
-
-///////////////////////////////////////////////////////////////////////
-
-int TopiaryPresetzModel::getVariationLenInTicks(int v)
-{
-	return variation[v].lenInTicks;
-
-} // getVariationLenInTicks
-
-///////////////////////////////////////////////////////////////////////
-
-bool TopiaryPresetzModel::getVariationEnabled(int v)
-{
-	return variation[v].enabled;
-	
-} // getVariationEnabled
-*/
-///////////////////////////////////////////////////////////////////////
 
 void TopiaryPresetzModel::initializeVariationsForRunning()
 {
@@ -572,7 +548,6 @@ void TopiaryPresetzModel::initializeVariationsForRunning()
 		variation[v].currentPatternChild = nullptr;
 	}
 } // initializeVariationsForRunning
-
 
 
 ///////////////////////////////////////////////////////////////////////
@@ -618,9 +593,9 @@ void TopiaryPresetzModel::generateTransition()
 	renumberByTimestamp(transition); 
 
 	//Logger::writeToLog("-------------------- TRANSITION GENERATED ---------------------");
-	//String myXmlDoc2 = transition->createDocument(String());
-	//Logger::writeToLog(myXmlDoc2);
-	//Logger::writeToLog("Transition from "+String(transitioningFrom)+" to "+String(transitioningTo)+" generated.");
+	String myXmlDoc2 = transition->createDocument(String());
+	Logger::writeToLog(myXmlDoc2);
+	Logger::writeToLog("Transition from "+String(transitioningFrom)+" to "+String(transitioningTo)+" generated.");
 
 	// set spinlock
 	const GenericScopedLock<SpinLock> myScopedLock(lockModel);
@@ -651,7 +626,7 @@ void TopiaryPresetzModel::threadRunner()
 	//Logger::outputDebugString("RUNNER: set variation{" + String(variationSelected) + "].ended FALSE");
 	variation[variationSelected].ended = false; // so it can start running
 	variation[variationRunning].ended = false;
-	Logger::outputDebugString("RUNNER: Variation ready for transition ------------------------>");
+	//Logger::outputDebugString("RUNNER: Variation ready for transition ------------------------>");
 
 } // threadRunner
 
