@@ -2,8 +2,8 @@
 
 Topiary Presetz is a plugin that allows the user to define 8 sets of "mix settings", and apply those at the touch of a button. Transition from one setting to another can be quantized and timed relative to the (host) transport.
 
-* Topiary Presetz folder contains the code and a projucer file
-* Topiary folder contains code used by other Topiary modules; code is duplicated to make it easy for you :)
+* Topiary Presetz folder contains the code and a projucer file.
+* Topiary folder contains code used by other Topiary modules; code is duplicated to make it easy for you :).
 
 ## Compile yourself
 
@@ -13,8 +13,8 @@ Careful: binary data is provided in the Topiary/JuceLibraryCode folder - make su
 
 ## Compatibility / Testing
 
-* Tested/Compiled with Juce 5.3 / Visual Studio 2017 / VST2 / Windows10/X64
-* Tested with no issues in Cantabile 3 and Cubase LE
+* Tested/Compiled with Juce 5.3 / Visual Studio 2017 / VST2 / Windows10/X64.
+* Tested with no issues in Cantabile 3, Cubase LE and Reaper.
 
 ## Installing binaries
 
