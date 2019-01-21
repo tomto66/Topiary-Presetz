@@ -1,4 +1,4 @@
-# Topiary-Presetz 0.9.0
+# Topiary-Presetz 0.9.2
 
 Topiary Presetz is a plugin that allows the user to define 8 sets of "mix settings", and apply those at the touch of a button. Transition from one setting to another can be quantized and timed relative to the (host) transport.
 
@@ -20,9 +20,12 @@ Careful: binary data is provided in the Topiary/JuceLibraryCode folder - make su
 
 * Plugin is found under Topiary Presetz / binaries.  Feel free to rename it.
 * Install in your VST2 plugin folder.  You host may need to rescan that folder.
+* Microsoft .Net framework is needed; see manual for details (link below).
 
 ## Manual
 
 Here: https://topiaryplugins.wordpress.com/topiary-presetz-manual/
 
 ## Release Notes
+
+Here: https://wordpress.com/post/topiaryplugins.wordpress.com/170
