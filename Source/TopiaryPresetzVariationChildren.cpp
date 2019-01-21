@@ -42,7 +42,7 @@ along with Topiary Presetz. If not, see <https://www.gnu.org/licenses/>.
 		
 		variationCombo.onChange = [this]
 		{
-			parent->getVariationDefinition();
+			parent->getVariationDefinition(); 
 		};
 
 		addAndMakeVisible(timingCombo);

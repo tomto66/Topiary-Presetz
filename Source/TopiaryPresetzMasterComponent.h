@@ -48,7 +48,8 @@ private:
 	void actionListenerCallback(const String &message);
 
 	VariationDefinitionComponent variationDefinitionComponent;
-	
+	bool getVariationCalledFromChangeInVariationButton;  // to avoid setting variations too often
+
 	int variation = -1; // the one we are working on; 0-7
 
 	static const int buttonH = 20;
@@ -63,7 +64,6 @@ private:
 	// the preset components
 
 	PresetElementComponent presetElement[PRESETELEMENTS];
-
 
 	// settings stuff
 

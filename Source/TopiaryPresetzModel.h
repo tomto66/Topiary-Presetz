@@ -35,6 +35,7 @@ public:
 	bool processVariationSwitch() override;
 	bool switchingVariations() override;
 	void getVariationDetailForGenerateMidi(XmlElement** parent, XmlElement** noteChild, int& parentLength, bool& ending, bool& ended) override;
+	void generateMidi(MidiBuffer* midiBuffer) override;
 	void initializeVariationsForRunning() override;
 	void addParametersToModel() override;
 	void restoreParametersToModel() override;

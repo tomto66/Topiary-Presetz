@@ -24,6 +24,7 @@ TopiaryPresetzMasterComponent::TopiaryPresetzMasterComponent()
 {   // size set by TabbedComponent!
 
 	variation = 0;
+	getVariationCalledFromChangeInVariationButton = false;
 	variationDefinitionComponent.setParent(this);
 	addAndMakeVisible(variationDefinitionComponent);
 
@@ -205,12 +206,26 @@ void TopiaryPresetzMasterComponent::actionListenerCallback(const String &message
 	{
 		getVariationDefinition();  // will get the variation in the selected combo; if invalid it will set it to 1; then it will get the preset definitions
 	}
-	if (message.compare(MsgRealTimeParameter) == 0)
+	else if (message.compare(MsgRealTimeParameter) == 0)
 	{
 		// something changed in realtime; update the RT values
 		for (int i = 0; i < PRESETELEMENTS; i++)
 		{
 			presetElement[i].RTSlider.setValue(presetzModel->getRTValue(i), dontSendNotification);
+		}
+	}
+	else if (message.compare(MsgVariationSelected) == 0)
+	{
+		// set the combo to the selected variation
+		int unused, newVariation;
+		presetzModel->getVariation(newVariation, unused);
+		if (variation != newVariation)
+		{
+			variationDefinitionComponent.variationCombo.setSelectedId(newVariation + 1, dontSendNotification);
+			getVariationCalledFromChangeInVariationButton = true;
+			getVariationDefinition();
+			getVariationCalledFromChangeInVariationButton = false;
+			UNUSED(unused)
 		}
 	}
 	
@@ -230,9 +245,9 @@ void TopiaryPresetzMasterComponent::getPresetElementData(int p)
 	presetzModel->getPresetDefinition(p, pname, from, to, inCC, inChannel, outCC, outChannel, enabled);
 
 	presetElement[p].RTSlider.setValue(presetzModel->getRTValue(p), dontSendNotification);
-	presetElement[p].inCCEditor.setText(String(inCC));
+	presetElement[p].inCCEditor.setText(String(inCC), dontSendNotification);
 	presetElement[p].inChannelEditor.setText(String(inChannel), dontSendNotification);
-	presetElement[p].outCCEditor.setText(String(outCC));
+	presetElement[p].outCCEditor.setText(String(outCC), dontSendNotification);
 	presetElement[p].outChannelEditor.setText(String(outChannel), dontSendNotification);
 	presetElement[p].valueFromEditor.setText(String(from), dontSendNotification);
 	presetElement[p].valueToEditor.setText(String(to), dontSendNotification);
@@ -351,6 +366,8 @@ void TopiaryPresetzMasterComponent::getVariationDefinition()
 	if (variation != (variationDefinitionComponent.variationCombo.getSelectedId() - 1))
 	{
 		variation = variationDefinitionComponent.variationCombo.getSelectedId() - 1;
+		if (variation != -1  && !getVariationCalledFromChangeInVariationButton)  // because otherwise the variation is already set in the editor
+			presetzModel->setVariation(variation); // so that the variation buttons follow
 	}
 
 	if (variation < 0) return;  // this should never happen, except when initializing

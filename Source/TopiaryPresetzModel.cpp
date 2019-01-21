@@ -257,7 +257,6 @@ TopiaryPresetzModel::TopiaryPresetzModel()
 	BPM = 120;
 	numerator = 4; denominator = 4;
 	runStopQ = Topiary::Quantization::Immediate;			// not in editor, make sure these are set correctly	
-	
 
 	// initialization of definitions
 	int ccStart = 102;
@@ -298,6 +297,7 @@ TopiaryPresetzModel::TopiaryPresetzModel()
 
 	variationSelected = 0;
 	variationRunning = 0;
+	
 	topiaryThread.notify();
 	
 } // TopiaryPresetzModel
@@ -521,16 +521,17 @@ void TopiaryPresetzModel::setVariation(int n)
 
 	if ((n != variationSelected) || (runState == Topiary::Stopped))
 		// the || runState || is needed because we may need to re-set a waiting variation to non-waiting; in that case we want the update to happen otherwise the buttons stays orange
-		if (variation[n].enabled)
-		{
+		
+		//if (variation[n].enabled)
+		//{
 			variationSelected = n;
 			if (runState == Topiary::Stopped)  // otherwise the switch will be done when running depending on the variation switch Q
 				variationRunning = n;
 			Log(String("Variation ") + String(n+1) + String(" selected."), Topiary::LogType::Variations);
-			broadcaster.sendActionMessage(MsgVariationSelected);
-		}
+			broadcaster.sendActionMessage(MsgVariationSelected);  // if the editor is there it will pick up the change in variation
+		//}
 
-	if ((runState != Topiary::Running) && variation[variationSelected].enabled) 
+	if ((runState != Topiary::Running) && variation[variationSelected].enabled)
 		// we ALWAYS do this - even if the variation does not change (because we may wanna hit the variation button to reset it (presetz)
 		// so even if WFFN is on - as long as we are waiting wo do an immediate output of the variation settings!
 		outputVariationEvents(); // output the variation preset values!
@@ -638,9 +639,10 @@ void TopiaryPresetzModel::outputVariationEvents()
 	// called when a variation is clicked on outside of running - pre-dest the preset values in modelEventBuffer so processor will pick it up
 
 	jassert(runState != Topiary::Running);
-
-	MidiMessage msg;
+	// the caller is setVariation whic has the model lock, so this is safe
 	
+	MidiMessage msg;
+	modelEventBuffer.clear();
 	{
 		for (int p = 0; p < PRESETELEMENTS; p++)
 		{
