@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <JUCERPROJECT id="so1YrE" name="Topiary Presetz" projectType="audioplug" jucerVersion="5.3.2"
-              version="0.9.0" companyName="Topiary" pluginManufacturer="Topiary"
+              version="0.9.3" companyName="Topiary" pluginManufacturer="Topiary"
               pluginVSTCategory="kPlugCategGenerator" pluginManufacturerCode="Tpry"
               pluginCode="Tpry" pluginCharacteristicsValue="pluginIsMidiEffectPlugin,pluginIsSynth,pluginProducesMidiOut,pluginWantsMidiIn"
               splashScreenColour="Light" pluginFormats="buildStandalone,buildVST"
@@ -16,10 +16,6 @@
             resource="0" file="Source/TopiaryPresetzMasterComponent.cpp"/>
       <FILE id="QbkOsd" name="TopiaryPresetzMasterComponent.h" compile="0"
             resource="0" file="Source/TopiaryPresetzMasterComponent.h"/>
-      <FILE id="S8FizM" name="TopiaryPresetzRealTimeComponent.cpp" compile="1"
-            resource="0" file="Source/TopiaryPresetzRealTimeComponent.cpp"/>
-      <FILE id="upjgWm" name="TopiaryPresetzRealTimeComponent.h" compile="0"
-            resource="0" file="Source/TopiaryPresetzRealTimeComponent.h"/>
       <FILE id="gn8Hnb" name="topiary _presetz_logo_7.png" compile="0" resource="1"
             file="resources/topiary _presetz_logo_7.png"/>
       <FILE id="xhqjmO" name="PresetzPluginProcessor.cpp" compile="1" resource="0"
@@ -36,10 +32,10 @@
             compile="0" resource="0" file="Source/TopiaryPresetzVariationButtonsComponent.h"/>
       <FILE id="YUZfIZ" name="TopiaryPresetzHeaderComponent.cpp" compile="1"
             resource="0" file="Source/TopiaryPresetzHeaderComponent.cpp"/>
-      <FILE id="bahm8j" name="TopiaryPresetzAutomationComponent.cpp" compile="1"
-            resource="0" file="Source/TopiaryPresetzAutomationComponent.cpp"/>
-      <FILE id="NyKoxU" name="TopiaryPresetzAutomationComponent.h" compile="0"
-            resource="0" file="Source/TopiaryPresetzAutomationComponent.h"/>
+      <FILE id="bahm8j" name="TopiaryPresetzUtilityComponent.cpp" compile="1"
+            resource="0" file="Source/TopiaryPresetzUtilityComponent.cpp"/>
+      <FILE id="NyKoxU" name="TopiaryPresetzUtilityComponent.h" compile="0"
+            resource="0" file="Source/TopiaryPresetzUtilityComponent.h"/>
       <FILE id="KmOJGE" name="TopiaryPresetzLogComponent.cpp" compile="1"
             resource="0" file="Source/TopiaryPresetzLogComponent.cpp"/>
       <FILE id="NIg9QM" name="TopiaryPresetzLogComponent.h" compile="0" resource="0"
@@ -74,10 +70,10 @@
           file="../Topiary/Source/PluginProcessor.h"/>
     <FILE id="C2qdKP" name="Topiary.cpp" compile="1" resource="0" file="../Topiary/Source/Topiary.cpp"/>
     <FILE id="CO0GaG" name="Topiary.h" compile="0" resource="0" file="../Topiary/Source/Topiary.h"/>
-    <FILE id="QdWBA2" name="TopiaryAutomationComponent.cpp" compile="1"
-          resource="0" file="../Topiary/Source/TopiaryAutomationComponent.cpp"/>
-    <FILE id="MxPWpg" name="TopiaryAutomationComponent.h" compile="0" resource="0"
-          file="../Topiary/Source/TopiaryAutomationComponent.h"/>
+    <FILE id="QdWBA2" name="TopiaryUtilityComponent.cpp" compile="1" resource="0"
+          file="../Topiary/Source/TopiaryUtilityComponent.cpp"/>
+    <FILE id="MxPWpg" name="TopiaryUtilityComponent.h" compile="0" resource="0"
+          file="../Topiary/Source/TopiaryUtilityComponent.h"/>
     <FILE id="hXo1Hl" name="TopiaryLogComponent.cpp" compile="1" resource="0"
           file="../Topiary/Source/TopiaryLogComponent.cpp"/>
     <FILE id="cMRCMb" name="TopiaryLogComponent.h" compile="0" resource="0"
@@ -87,13 +83,6 @@
     <FILE id="gqDwmi" name="TopiaryModel.h" compile="0" resource="0" file="../Topiary/Source/TopiaryModel.h"/>
     <FILE id="BIOKZq" name="TopiaryModelIncludes.cpp" compile="1" resource="0"
           file="../Topiary/Source/TopiaryModelIncludes.cpp"/>
-    <FILE id="Ci0hNq" name="TopiaryRealTimeComponent.cpp" compile="1" resource="0"
-          file="../Topiary/Source/TopiaryRealTimeComponent.cpp"/>
-    <FILE id="S1sjH2" name="TopiaryRealTimeComponent.h" compile="0" resource="0"
-          file="../Topiary/Source/TopiaryRealTimeComponent.h"/>
-    <FILE id="sEuQqY" name="TopiaryTable.cpp" compile="1" resource="0"
-          file="../Topiary/Source/TopiaryTable.cpp"/>
-    <FILE id="TeId1a" name="TopiaryTable.h" compile="0" resource="0" file="../Topiary/Source/TopiaryTable.h"/>
     <FILE id="c7GnKn" name="TopiaryThread.cpp" compile="1" resource="0"
           file="../Topiary/Source/TopiaryThread.cpp"/>
     <FILE id="arEHnQ" name="TopiaryThread.h" compile="0" resource="0" file="../Topiary/Source/TopiaryThread.h"/>
