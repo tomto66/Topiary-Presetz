@@ -22,7 +22,7 @@ along with Topiary Presetz. If not, see <https://www.gnu.org/licenses/>.
 #include "TopiaryPresetzTransportComponent.h"
 #include "TopiaryPresetzVariationButtonsComponent.h"
 
-class TopiaryPresetzHeaderComponent : public Component,  ActionListener
+class TopiaryPresetzHeaderComponent : public Component,  ActionListener, Timer
 {
 public:
 
@@ -32,12 +32,27 @@ public:
 	void paint(Graphics& g) override;
 	void resized() override;
 	void actionListenerCallback(const String &message) override;
+	void timerCallback();
 
 private:
 	TopiaryPresetzTransportComponent transportComponent;
 	TopiaryPresetzVariationButtonsComponent variationButtonsComponent;
 	TopiaryPresetzModel* presetzModel;
 	TextEditor warningEditor;
+	TextEditor timeEditor; 
+
+	void getTime()
+	{
+		int m, b;
+		String timing;
+
+		presetzModel->getTime(m, b);
+		timing = String(m) + " : " + String(b);
+
+		if (timeEditor.getText().compare(timing) != 0)
+			timeEditor.setText(timing);
+
+	} // getTime
 
 	JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(TopiaryPresetzHeaderComponent)
 };

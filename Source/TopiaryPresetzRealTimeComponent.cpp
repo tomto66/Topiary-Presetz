@@ -18,31 +18,5 @@ along with Topiary Presetz. If not, see <https://www.gnu.org/licenses/>.
 /////////////////////////////////////////////////////////////////////////////
 
 #pragma once
-#include "TopiaryPresetzMasterComponent.h"
-#include "TopiaryPresetzLogComponent.h"
 #include "TopiaryPresetzRealTimeComponent.h"
-#include "TopiaryPresetzComponent.h"
-#include "TopiaryPresetzUtilityComponent.h"
-
-class TopiaryPresetzTabbedComponent:  public Component, ActionListener
-{
-public:
-	TopiaryPresetzTabbedComponent();
-    ~TopiaryPresetzTabbedComponent();
-	void setModel(TopiaryPresetzModel* model);
-    void paint (Graphics&) override;
-    void resized() override;  
-	void actionListenerCallback(const String &message) override;
-
-private:
-	TopiaryPresetzModel* beatsModel;
-	TabbedComponent beatsTabs;
-	TopiaryPresetzMasterComponent masterComponent;
-	TopiaryPresetzLogComponent logComponent;
-	TopiaryPresetzUtilityComponent utilityComponent;
-
-	int tabHeight;
-	int height;
-
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (TopiaryPresetzTabbedComponent)
-};
+#include "../../Topiary/Source/TopiaryRealTimeComponent.cpp"

@@ -35,11 +35,8 @@ TopiaryPresetzTabbedComponent::TopiaryPresetzTabbedComponent() : beatsTabs(Tabbe
 	masterComponent.setSize(TopiaryPresetzComponent::width, tabHeight);
 	beatsTabs.addTab("Master", TopiaryColour::background, &masterComponent, true);
 
-	realtimeComponent.setSize(TopiaryPresetzComponent::width, tabHeight);
-	beatsTabs.addTab("Realtime", TopiaryColour::background, &realtimeComponent, true);
-
-	automationComponent.setSize(TopiaryPresetzComponent::width, tabHeight);
-	beatsTabs.addTab("Automation", TopiaryColour::background, &automationComponent, true);
+	utilityComponent.setSize(TopiaryPresetzComponent::width, tabHeight);
+	beatsTabs.addTab("Utility", TopiaryColour::background, &utilityComponent, true);
 
 	logComponent.setSize(TopiaryPresetzComponent::width, tabHeight);
 	beatsTabs.addTab("Log", TopiaryColour::background, &logComponent, true);
@@ -62,8 +59,7 @@ void TopiaryPresetzTabbedComponent::setModel(TopiaryPresetzModel* model)
 	beatsModel = model;
 	masterComponent.setModel(beatsModel);
 	logComponent.setModel(beatsModel);
-	realtimeComponent.setModel(beatsModel);
-	automationComponent.setModel(beatsModel);
+	utilityComponent.setModel(beatsModel);
 	beatsModel->setListener((ActionListener*)this);
 }
 
@@ -95,12 +91,12 @@ void TopiaryPresetzTabbedComponent::actionListenerCallback(const String &message
 		if ((runState == Topiary::Running) || (runState == Topiary::Armed) || (runState == Topiary::Ending))
 		{
 			masterComponent.setEnabled(false);
-			automationComponent.setEnabled(false);
+			utilityComponent.setEnabled(false);
 		}
 		else
 		{
 			masterComponent.setEnabled(true);
-			automationComponent.setEnabled(true);
+			utilityComponent.setEnabled(true);
 		}
 	}
 } // actionListenerCallback

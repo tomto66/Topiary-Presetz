@@ -503,43 +503,6 @@ void TopiaryPresetzModel::setVariationDefinition(int v, bool enabled, String vna
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void TopiaryPresetzModel::getVariation(int& running, int& selected)
-{
-	running = variationRunning;
-	selected = variationSelected;
-	return;
-
-} // getVariation
-
-///////////////////////////////////////////////////////////////////////
-
-void TopiaryPresetzModel::setVariation(int n)
-{
-	jassert(n < 8);
-	jassert(n >= 0);
-	const GenericScopedLock<SpinLock> myScopedLock(lockModel);
-
-	if ((n != variationSelected) || (runState == Topiary::Stopped))
-		// the || runState || is needed because we may need to re-set a waiting variation to non-waiting; in that case we want the update to happen otherwise the buttons stays orange
-		
-		//if (variation[n].enabled)
-		//{
-			variationSelected = n;
-			if (runState == Topiary::Stopped)  // otherwise the switch will be done when running depending on the variation switch Q
-				variationRunning = n;
-			Log(String("Variation ") + String(n+1) + String(" selected."), Topiary::LogType::Variations);
-			broadcaster.sendActionMessage(MsgVariationSelected);  // if the editor is there it will pick up the change in variation
-		//}
-
-	if ((runState != Topiary::Running) && variation[variationSelected].enabled)
-		// we ALWAYS do this - even if the variation does not change (because we may wanna hit the variation button to reset it (presetz)
-		// so even if WFFN is on - as long as we are waiting wo do an immediate output of the variation settings!
-		outputVariationEvents(); // output the variation preset values!
-
-} // setVariation
-
-///////////////////////////////////////////////////////////////////////
-
 void TopiaryPresetzModel::initializeVariationsForRunning()
 {
 	// careful; this code is different in various plugins - don't think it's generic!!!
@@ -659,3 +622,186 @@ void TopiaryPresetzModel::outputVariationEvents()
 	}
 	
 } // outputVariationEvents
+
+///////////////////////////////////////////////////////////////////////
+
+void TopiaryPresetzModel::copyVariation(int from, int to)
+{
+	jassert((from < 8) && (from >= 0));
+	jassert((to < 8) && (to >= 0));
+
+	const GenericScopedLock<SpinLock> myScopedLock(lockModel);
+
+	variation[to].enabled = variation[from].enabled;
+	variation[to].name = variation[from].name + String(" copy");
+	variation[to].lenInTicks = variation[from].lenInTicks;
+	//variation[to].pattern = variation[from].pattern;
+	variation[to].currentPatternChild = nullptr;
+	variation[to].ending = variation[from].ending;
+	variation[to].ended = variation[from].ended;
+	variation[to].timing = variation[from].timing;
+	for (int i = 0; i < PRESETELEMENTS; i++)
+	{
+		variation[to].presetValue[i] = variation[from].presetValue[i];
+	}
+	
+	broadcaster.sendActionMessage(MsgMaster);
+	broadcaster.sendActionMessage(MsgVariationEnables);
+	Log("Variation " + String(from+1) + " copied to " + String(to+1) + ".", Topiary::LogType::Info);
+
+} // copyVariation
+
+///////////////////////////////////////////////////////////////////////
+
+void TopiaryPresetzModel::swapVariation(int from, int to)
+{
+	jassert((from < 8) && (from >= 0));
+	jassert((to < 8) && (to >= 0));
+
+	bool rEnabled;
+	String rName;
+	int rLenInTicks;
+	XmlElement* rPattern;
+	XmlElement* rCurrentPatternChild;
+	bool rEnding;
+	bool rEnded;
+	int rTiming;
+	int rPresetValue[PRESETELEMENTS];
+
+	const GenericScopedLock<SpinLock> myScopedLock(lockModel);
+
+	rEnabled = variation[from].enabled;
+	rName = variation[from].name;
+	rLenInTicks = variation[from].lenInTicks;
+	rPattern = variation[from].pattern;
+	rCurrentPatternChild = variation[from].currentPatternChild;
+	rEnding = variation[from].ending;
+	rEnded = variation[from].ended;
+	rTiming = variation[from].timing;
+	for (int i = 0; i < PRESETELEMENTS; i++)
+	{
+		rPresetValue[i] = variation[from].presetValue[i];
+	}
+
+	variation[from].enabled = variation[to].enabled;
+	variation[from].name = variation[to].name;
+	variation[from].lenInTicks = variation[to].lenInTicks;
+	variation[from].pattern = variation[to].pattern;
+	variation[from].currentPatternChild = variation[to].currentPatternChild;
+	variation[from].ending = variation[to].ending;
+	variation[from].ended = variation[to].ended;
+	variation[from].timing = variation[to].timing;
+	for (int i = 0; i < PRESETELEMENTS; i++)
+	{
+		variation[from].presetValue[i] = variation[to].presetValue[i];
+	}
+
+	variation[to].enabled = rEnabled;
+	variation[to].name = rName;
+	variation[to].lenInTicks = rLenInTicks;
+	variation[to].pattern = rPattern;
+	variation[to].currentPatternChild = rCurrentPatternChild;
+	variation[to].ending = rEnding;
+	variation[to].ended = rEnded;
+	variation[to].timing = rTiming;
+	for (int i = 0; i < PRESETELEMENTS; i++)
+	{
+		variation[to].presetValue[i] = rPresetValue[i];
+	}
+
+	broadcaster.sendActionMessage(MsgMaster);
+	broadcaster.sendActionMessage(MsgVariationEnables);
+	Log("Variation " + String(from+1) + " swapped with " + String(to+1) + ".", Topiary::LogType::Info);
+
+} // swapVariation
+
+/////////////////////////////////////////////////////////////////////////////
+
+void TopiaryPresetzModel::copyPreset(int from, int to)
+{
+	jassert((from < 8) && (from >= 0));
+	jassert((to < 8) && (to >= 0));
+
+	const GenericScopedLock<SpinLock> myScopedLock(lockModel);
+
+	presetDefinition[to].name = presetDefinition[from].name + String(" copy");
+	presetDefinition[to].fromValue = presetDefinition[from].fromValue;
+	presetDefinition[to].toValue = presetDefinition[from].toValue;
+	presetDefinition[to].inCC = presetDefinition[from].inCC;
+	presetDefinition[to].inChannel = presetDefinition[from].inChannel;
+	presetDefinition[to].outCC = presetDefinition[from].outCC;
+	presetDefinition[to].outChannel = presetDefinition[from].outChannel;
+	presetDefinition[to].enabled = presetDefinition[from].enabled;
+
+	// also copy the preset values in the variations !!!
+	for (int v = 0; v < 8; v++)
+	{
+		variation[v].presetValue[to] = variation[v].presetValue[from];
+	}
+
+	broadcaster.sendActionMessage(MsgMaster);
+	Log("Preset " + String(from+1) + " copied to " + String(to+1) + ".", Topiary::LogType::Info);
+
+} // copyPreset
+
+/////////////////////////////////////////////////////////////////////////////
+
+void TopiaryPresetzModel::swapPreset(int from, int to)
+{
+	jassert((from < 8) && (from >= 0));
+	jassert((to < 8) && (to >= 0));
+
+	String rName;
+	int rFromValue = 0;
+	int rToValue = 127;
+	int rInCC = 0;
+	int rInChannel = 0;
+	int rOutCC = 0;
+	int rOutChannel;
+	bool rEnabled;
+
+	const GenericScopedLock<SpinLock> myScopedLock(lockModel);
+
+	rName = presetDefinition[to].name;
+	rFromValue = presetDefinition[to].fromValue;
+	rToValue = presetDefinition[to].toValue;
+	rInCC = presetDefinition[to].inCC;
+	rInChannel = presetDefinition[to].inChannel;
+	rOutCC = presetDefinition[to].outCC;
+	rOutChannel = presetDefinition[to].outChannel;
+	rEnabled = presetDefinition[to].enabled;
+
+	presetDefinition[to].name = presetDefinition[from].name;
+	presetDefinition[to].fromValue = presetDefinition[from].fromValue;
+	presetDefinition[to].toValue = presetDefinition[from].toValue;
+	presetDefinition[to].inCC = presetDefinition[from].inCC;
+	presetDefinition[to].inChannel = presetDefinition[from].inChannel;
+	presetDefinition[to].outCC = presetDefinition[from].outCC;
+	presetDefinition[to].outChannel = presetDefinition[from].outChannel;
+	presetDefinition[to].enabled = presetDefinition[from].enabled;
+
+	presetDefinition[from].name = rName;
+	presetDefinition[from].fromValue = rFromValue;
+	presetDefinition[from].toValue = rToValue;
+	presetDefinition[from].inCC = rInCC;
+	presetDefinition[from].inChannel = rInChannel;
+	presetDefinition[from].outCC = rOutCC;
+	presetDefinition[from].outChannel = rOutChannel;
+	presetDefinition[from].enabled = rEnabled;
+
+	// also swap the preset values in the variations !!!
+	for (int v = 0; v < 8; v++)
+	{
+		int r;
+		r = variation[v].presetValue[to];
+		variation[v].presetValue[to] = variation[v].presetValue[from];
+		variation[v].presetValue[from] = r;
+	}
+
+	broadcaster.sendActionMessage(MsgMaster);
+	Log("Preset " + String(from+1) + " swapped with " + String(to+1) + ".", Topiary::LogType::Info);
+
+} // swapPreset
+
+/////////////////////////////////////////////////////////////////////////////
+

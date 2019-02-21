@@ -31,8 +31,10 @@ TopiaryPresetzHeaderComponent::TopiaryPresetzHeaderComponent()
 	warningEditor.setColour(TextEditor::backgroundColourId, TopiaryColour::orange);
 	warningEditor.setColour(TextEditor::textColourId, Colours::lightyellow  );
 	warningEditor.setColour(TextEditor::outlineColourId, TopiaryColour::orange);
-		
-
+	
+	addAndMakeVisible(timeEditor);
+	timeEditor.setVisible(false);
+	timeEditor.setEnabled(false);
 }
 
 /////////////////////////////////////////////////////////////////////////
@@ -71,7 +73,7 @@ void TopiaryPresetzHeaderComponent::paint(Graphics& g) {
 	transportComponent.setBounds(295, 30, 350,45);
 
 	warningEditor.setBounds(645, 5, 330, 18);
-	warningEditor.setText(presetzModel->getLastWarning());
+	timeEditor.setBounds(402, 17, 70, 18);
 
 }  // paint
 
@@ -83,7 +85,15 @@ void TopiaryPresetzHeaderComponent::actionListenerCallback(const String &message
 	
 	if (message.compare(MsgWarning) == 0)
 	{
+		warningEditor.setText(presetzModel->getLastWarning());
 		warningEditor.setVisible(true);
+		startTimer(3000);
+	}
+	else if (message.compare(MsgTiming) == 0)
+	{
+		timeEditor.setVisible(true);
+		getTime();
+		startTimer(5000);
 	}
 	else
 	{
@@ -99,7 +109,13 @@ void TopiaryPresetzHeaderComponent::actionListenerCallback(const String &message
 
 } // actionListenerCallback
 
+//////////////////////////////////////////////////////////////
 
-
-
-
+void TopiaryPresetzHeaderComponent::timerCallback()
+{
+	if (warningEditor.isVisible())
+		warningEditor.setVisible(false);
+	else if (timeEditor.isVisible())
+		timeEditor.setVisible(false);
+	stopTimer();
+}

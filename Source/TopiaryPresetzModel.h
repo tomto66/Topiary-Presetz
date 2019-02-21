@@ -28,8 +28,7 @@ public:
 	TopiaryPresetzModel();
 	~TopiaryPresetzModel();
 		
-	//void savePreset(File f) override;
-	//void loadPreset(File f) override;
+	void setNumeratorDenominator(int nu, int de);
 	void saveStateToMemoryBlock(MemoryBlock& destData) override;
 	void restoreStateFromMemoryBlock(const void* data, int sizeInBytes) override;
 	bool processVariationSwitch() override;
@@ -42,7 +41,11 @@ public:
 	void generateTransition();
 	void threadRunner() override;
 	void outputVariationEvents();			// potentially generate events when variation button is pressed (outside of running) - certainly needed for presetz
-	
+	void setOverrideHostTransport(bool o);
+	void swapVariation(int from, int to) override;
+	void copyVariation(int from, int to) override;
+	void swapPreset(int from, int to) override;
+	void copyPreset(int from, int to) override;
 
 #define PRESETELEMENTS 8
 #define PRESETTRANSITIONSTEPS 10
