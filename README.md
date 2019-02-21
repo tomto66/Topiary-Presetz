@@ -1,4 +1,4 @@
-# Topiary-Presetz 0.9.2
+# Topiary-Presetz 0.9.3
 
 Topiary Presetz is a plugin that allows the user to define 8 sets of "mix settings", and apply those at the touch of a button. Transition from one setting to another can be quantized and timed relative to the (host) transport.
 
@@ -28,4 +28,4 @@ Here: https://topiaryplugins.wordpress.com/topiary-presetz-manual/
 
 ## Release Notes
 
-Here: https://wordpress.com/post/topiaryplugins.wordpress.com/170
+Here: https://topiaryplugins.wordpress.com/category/presetz-release-notes/
