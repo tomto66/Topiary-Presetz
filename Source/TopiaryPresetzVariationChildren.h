@@ -66,7 +66,8 @@ public:
 	ToggleButton enableButton;
 	TextEditor nameEditor;
 
-	TextEditor valueFromEditor, valueToEditor, inCCEditor, inChannelEditor, outCCEditor, outChannelEditor;
+	TextEditor valueFromEditor, valueToEditor, inChannelEditor, outCCEditor, outChannelEditor;
+	TopiaryMidiLearnEditor inCCEditor;
 
 	TopiaryLookAndFeel presetLookAndFeel;
 

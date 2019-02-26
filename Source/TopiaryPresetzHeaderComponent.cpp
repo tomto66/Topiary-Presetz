@@ -114,7 +114,10 @@ void TopiaryPresetzHeaderComponent::actionListenerCallback(const String &message
 void TopiaryPresetzHeaderComponent::timerCallback()
 {
 	if (warningEditor.isVisible())
+	{
 		warningEditor.setVisible(false);
+		presetzModel->stopLearningMidi();
+	}
 	else if (timeEditor.isVisible())
 		timeEditor.setVisible(false);
 	stopTimer();

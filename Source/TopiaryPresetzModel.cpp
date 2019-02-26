@@ -21,7 +21,6 @@ along with Topiary Presetz. If not, see <https://www.gnu.org/licenses/>.
 #include "TopiaryPresetzModel.h"
 
 // following has std model code that can be included (cannot be in TopiaryModel because of variable definitions)
-#define TOPIARYMODEL TopiaryPresetzModel
 #include"../../Topiary/Source/TopiaryModelIncludes.cpp"
 
 void TopiaryPresetzModel::saveStateToMemoryBlock(MemoryBlock& destData)
@@ -250,6 +249,8 @@ TopiaryPresetzModel::TopiaryPresetzModel()
 	Log(String("but WITHOUT ANY WARRANTY; without even the implied warranty of"), Topiary::LogType::License);
 	Log(String("MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the"), Topiary::LogType::License);
 	Log(String("GNU General Public License for more details."), Topiary::LogType::License);
+	Log(String(""), Topiary::LogType::License);
+	Log(String("VST PlugIn Technology by Steinberg Media Technologies."), Topiary::LogType::License);
 	Log(String(""), Topiary::LogType::License);
 
 	overrideHostTransport = false;
@@ -805,3 +806,55 @@ void TopiaryPresetzModel::swapPreset(int from, int to)
 
 /////////////////////////////////////////////////////////////////////////////
 
+bool TopiaryPresetzModel::midiLearn(MidiMessage m)
+{
+	// called by processor; if midiLearn then learn based on what came in
+	const GenericScopedLock<SpinLock> myScopedLock(lockModel);
+	bool remember = learningMidi;
+	if (learningMidi)
+	{
+		bool note = m.isNoteOn();
+		bool cc = m.isController();
+
+		if (note || cc)
+		{
+			// check the Id to learn; tells us what to set
+			if ((midiLearnID >= TopiaryLearnMidiId::variationSwitch) && (midiLearnID < (TopiaryLearnMidiId::variationSwitch+8)))
+			{
+				// learning variation switch
+				if (note)
+				{
+					ccVariationSwitching = false;
+					variationSwitch[midiLearnID] = m.getNoteNumber();
+				}
+				else
+				{
+					ccVariationSwitching = true;
+					variationSwitch[midiLearnID] = m.getControllerNumber();
+				}
+				learningMidi = false;
+				Log("Midi learned", Topiary::LogType::Warning);
+				broadcaster.sendActionMessage(MsgVariationAutomation);	// update utility tab
+			}
+			else if ((midiLearnID >= TopiaryLearnMidiId::presetMidiCin) && (midiLearnID < (TopiaryLearnMidiId::presetMidiCin + 8)))
+			{
+
+				if (cc)
+				{
+					presetDefinition[midiLearnID- TopiaryLearnMidiId::presetMidiCin].inCC = m.getControllerNumber();
+					learningMidi = false;
+					Log("Midi learned", Topiary::LogType::Warning);
+					broadcaster.sendActionMessage(MsgMaster);	// update master
+				}
+			}
+			
+		}
+	}
+
+	return remember;
+} // midiLearn
+
+/////////////////////////////////////////////////////////////////////////////
+
+
+#include "../../Topiary/Source/TopiaryMidiLearnEditor.cpp"

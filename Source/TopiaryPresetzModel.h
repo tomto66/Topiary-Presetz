@@ -21,6 +21,19 @@ along with Topiary Presetz. If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #include "../../Topiary/Source/TopiaryModel.h"
 #define PRESETZ
+#define TOPIARYMODEL TopiaryPresetzModel
+#define TOPIARYLOGCOMPONENT TopiaryPresetzLogComponent
+#define TOPIARYUTILITYCOMPONENT TopiaryPresetzUtilityComponent
+#define TOPIARYTRANSPORTCOMPONENT TopiaryPresetzTransportComponent
+
+enum TopiaryLearnMidiId
+{
+	variationSwitch = 0, // meaning any 0 <= ID < 8 is learn midi for variation switchers
+	presetMidiCin = 10,
+	other = 20
+};
+
+#include "../../Topiary/Source/TopiaryMidiLearnEditor.h"
 
 class TopiaryPresetzModel : public TopiaryModel 
 {
@@ -93,12 +106,14 @@ public:
 	void processCC(MidiMessage& msg, MidiBuffer* buffer) override; 
 	void processCC(MidiMessage& msg) override;
 
+	bool midiLearn(MidiMessage m); // called by processor
+
 protected:
 	Variation variation[8];		
 	PresetElementDefinition presetDefinition[PRESETELEMENTS];		// the definitions
 
 	int presetRTValue[PRESETELEMENTS];								// the actual realtime values of where we are in real time (not stored in the presets nor the variations0
-			
+
 	///////////////////////////////////////////////////////////////////////
 
 	void generateTransition(int p, int v, XmlElement *transition, int length)

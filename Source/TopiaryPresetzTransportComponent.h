@@ -19,6 +19,4 @@ along with Topiary Presetz. If not, see <https://www.gnu.org/licenses/>.
 
 #pragma once
 #include"TopiaryPresetzModel.h"
-#define TOPIARYMODEL TopiaryPresetzModel
-#define TOPIARYTRANSPORTCOMPONENT TopiaryPresetzTransportComponent
 #include "../../Topiary/Source/TopiaryTransportComponent.h"
