@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <JUCERPROJECT id="so1YrE" name="Topiary Presetz" projectType="audioplug" jucerVersion="5.3.2"
-              version="0.9.3" companyName="Topiary" pluginManufacturer="Topiary"
+              version="0.9.6" companyName="Topiary" pluginManufacturer="Topiary"
               pluginVSTCategory="kPlugCategGenerator" pluginManufacturerCode="Tpry"
               pluginCode="Tpry" pluginCharacteristicsValue="pluginIsMidiEffectPlugin,pluginIsSynth,pluginProducesMidiOut,pluginWantsMidiIn"
               splashScreenColour="Light" pluginFormats="buildStandalone,buildVST"
@@ -94,6 +94,10 @@
           resource="0" file="../Topiary/Source/TopiaryVariationButtonsComponent.cpp"/>
     <FILE id="UOSCJ1" name="TopiaryVariationButtonsComponent.h" compile="0"
           resource="0" file="../Topiary/Source/TopiaryVariationButtonsComponent.h"/>
+    <FILE id="np623T" name="TopiaryMidiLearnEditor.h" compile="0" resource="0"
+          file="../Topiary/Source/TopiaryMidiLearnEditor.h"/>
+    <FILE id="HICVhZ" name="TopiaryMidiLearnEditor.cpp" compile="1" resource="0"
+          file="../Topiary/Source/TopiaryMidiLearnEditor.cpp"/>
   </MAINGROUP>
   <EXPORTFORMATS>
     <VS2017 targetFolder="Builds/VisualStudio2017" windowsTargetPlatformVersion="10.0.17134.0">
