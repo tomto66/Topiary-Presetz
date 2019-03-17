@@ -122,6 +122,7 @@ TOPIARYUTILITYCOMPONENT::TOPIARYUTILITYCOMPONENT()
 	vSwapFromCombo.setSelectedId(1);
 	vSwapToCombo.setSelectedId(2);
 
+#ifdef PRESETZ
 	///////////////////////////////////////
 	// Copy Presets
 	///////////////////////////////////////
@@ -135,13 +136,14 @@ TOPIARYUTILITYCOMPONENT::TOPIARYUTILITYCOMPONENT()
 
 	addAndMakeVisible(pCopyFromCombo);
 	addAndMakeVisible(pCopyToCombo);
-	for (int i = 1; i < 9; i++)
+	for (int i = 1; i <= PRESETELEMENTS; i++)
 	{
 		pCopyFromCombo.addItem(String(i), i);
 		pCopyToCombo.addItem(String(i), i);
 	}
 	pCopyFromCombo.setSelectedId(1);
 	pCopyToCombo.setSelectedId(2);
+
 
 	////////////////////////////////
 	// Swap Presets
@@ -156,13 +158,16 @@ TOPIARYUTILITYCOMPONENT::TOPIARYUTILITYCOMPONENT()
 
 	addAndMakeVisible(pSwapFromCombo);
 	addAndMakeVisible(pSwapToCombo);
-	for (int i = 1; i < 9; i++)
+	for (int i = 1; i <= PRESETELEMENTS; i++)
 	{
 		pSwapFromCombo.addItem(String(i), i);
 		pSwapToCombo.addItem(String(i), i);
 	}
 	pSwapFromCombo.setSelectedId(1);
 	pSwapToCombo.setSelectedId(2);
+#endif  // PRESETZ
+
+
 
 } // TOPIARYUTILITYCOMPONENT
 
@@ -182,7 +187,8 @@ void TOPIARYUTILITYCOMPONENT::setModel(TOPIARYMODEL* m)
 	model = m;
 	model->setListener((ActionListener*)this);
 	actionListenerCallback(MsgVariationAutomation);  // find variation automation values
-
+	for (int i = 0; i < 8; i++)
+		variationControlEditor[i].setModel(m, TopiaryLearnMidiId::variationSwitch+i);
 } // setModel
 
 /////////////////////////////////////////////////////////////////////////
@@ -217,7 +223,7 @@ void TOPIARYUTILITYCOMPONENT::paint(Graphics& g)
 	g.setColour(TopiaryColour::foreground);
 	g.setFont(12.0f);
 	
-	g.drawText("Variation switch automation   CH        V1       V2        V3        V4        V5        V6        V7       V8", posX + lineWidth, posY+lineWidth, 500, labelOffset, juce::Justification::centredLeft);
+	g.drawText("Variation Switch Automation   CH        V1       V2        V3        V4        V5        V6        V7       V8", posX + lineWidth, posY+lineWidth, 500, labelOffset, juce::Justification::centredLeft);
 
 	auto recBounds = variationSwitchArea.removeFromBottom(variationSwitchArea.getHeight() - labelOffset);
 	g.drawRoundedRectangle((float)recBounds.getX() + lineWidth, (float)recBounds.getY() + lineWidth, (float)recBounds.getWidth() - 2 * lineWidth, (float)recBounds.getHeight() - 2 * lineWidth, (float)lineWidth, (float)lineWidth);
@@ -257,10 +263,10 @@ void TOPIARYUTILITYCOMPONENT::paint(Graphics& g)
 	posY = 150;
 	w = 240;
 	h = 48;
-	int comboW = 50;
+	int comboW = 60;
 
 	auto copyVariationsArea = Rectangle<int>(posX, posY, w, h);
-	g.drawText("Copy Variations", posX + lineWidth, posY + lineWidth, 500, labelOffset, juce::Justification::centredLeft);
+	g.drawText("Copy Variation", posX + lineWidth, posY + lineWidth, 500, labelOffset, juce::Justification::centredLeft);
 
 	recBounds = copyVariationsArea.removeFromBottom(copyVariationsArea.getHeight() - labelOffset);
 	g.drawRoundedRectangle((float)recBounds.getX() + lineWidth, (float)recBounds.getY() + lineWidth, (float)recBounds.getWidth() - 2 * lineWidth, (float)recBounds.getHeight() - 2 * lineWidth, (float)lineWidth, (float)lineWidth);
@@ -268,7 +274,7 @@ void TOPIARYUTILITYCOMPONENT::paint(Graphics& g)
 	// turn it into inner rectangle
 	inRecBounds = Rectangle<int>::Rectangle(recBounds.getX() + 3 * lineWidth, recBounds.getY() + 3 * lineWidth, recBounds.getWidth() - 6 * lineWidth, recBounds.getHeight() - 6 * lineWidth);
 
-	g.drawText("From                 To", posX + spacer, posY + lineWidth + 20, 500, labelOffset, juce::Justification::centredLeft);
+	g.drawText("From                    To", posX + spacer, posY + lineWidth + 20, 500, labelOffset, juce::Justification::centredLeft);
 
 	buttonBounds = inRecBounds.removeFromLeft(spacer + 25);
 	buttonBounds = inRecBounds.removeFromLeft(comboW);
@@ -292,7 +298,7 @@ void TOPIARYUTILITYCOMPONENT::paint(Graphics& g)
 	h = 48;
 	
 	auto swapVariationsArea = Rectangle<int>(posX, posY, w, h);
-	g.drawText("Swap Variations", posX + lineWidth, posY + lineWidth, 500, labelOffset, juce::Justification::centredLeft);
+	g.drawText("Swap Variation", posX + lineWidth, posY + lineWidth, 500, labelOffset, juce::Justification::centredLeft);
 
 	recBounds = swapVariationsArea.removeFromBottom(swapVariationsArea.getHeight() - labelOffset);
 	g.drawRoundedRectangle((float)recBounds.getX() + lineWidth, (float)recBounds.getY() + lineWidth, (float)recBounds.getWidth() - 2 * lineWidth, (float)recBounds.getHeight() - 2 * lineWidth, (float)lineWidth, (float)lineWidth);
@@ -300,7 +306,7 @@ void TOPIARYUTILITYCOMPONENT::paint(Graphics& g)
 	// turn it into inner rectangle
 	inRecBounds = Rectangle<int>::Rectangle(recBounds.getX() + 3 * lineWidth, recBounds.getY() + 3 * lineWidth, recBounds.getWidth() - 6 * lineWidth, recBounds.getHeight() - 6 * lineWidth);
 
-	g.drawText("From                 To", posX + spacer, posY + lineWidth + 20, 500, labelOffset, juce::Justification::centredLeft);
+	g.drawText("From                    To", posX + spacer, posY + lineWidth + 20, 500, labelOffset, juce::Justification::centredLeft);
 
 	buttonBounds = inRecBounds.removeFromLeft(spacer + 25);
 	buttonBounds = inRecBounds.removeFromLeft(comboW);
@@ -314,6 +320,7 @@ void TOPIARYUTILITYCOMPONENT::paint(Graphics& g)
 	buttonBounds = inRecBounds.removeFromLeft(buttonW);
 	vSwapGoButton.setBounds(buttonBounds);
 
+#ifdef PRESETZ
 	//////////////////////////////////////////
 	// Copy Presets
 	//////////////////////////////////////////
@@ -324,7 +331,7 @@ void TOPIARYUTILITYCOMPONENT::paint(Graphics& g)
 	h = 48;
 	
 	auto copyPresetsArea = Rectangle<int>(posX, posY, w, h);
-	g.drawText("Copy Preset Definitions", posX + lineWidth, posY + lineWidth, 500, labelOffset, juce::Justification::centredLeft);
+	g.drawText("Copy Preset Definition", posX + lineWidth, posY + lineWidth, 500, labelOffset, juce::Justification::centredLeft);
 
 	recBounds = copyPresetsArea.removeFromBottom(copyPresetsArea.getHeight() - labelOffset);
 	g.drawRoundedRectangle((float)recBounds.getX() + lineWidth, (float)recBounds.getY() + lineWidth, (float)recBounds.getWidth() - 2 * lineWidth, (float)recBounds.getHeight() - 2 * lineWidth, (float)lineWidth, (float)lineWidth);
@@ -332,7 +339,7 @@ void TOPIARYUTILITYCOMPONENT::paint(Graphics& g)
 	// turn it into inner rectangle
 	inRecBounds = Rectangle<int>::Rectangle(recBounds.getX() + 3 * lineWidth, recBounds.getY() + 3 * lineWidth, recBounds.getWidth() - 6 * lineWidth, recBounds.getHeight() - 6 * lineWidth);
 
-	g.drawText("From                 To", posX + spacer, posY + lineWidth + 20, 500, labelOffset, juce::Justification::centredLeft);
+	g.drawText("From                    To", posX + spacer, posY + lineWidth + 20, 500, labelOffset, juce::Justification::centredLeft);
 
 	buttonBounds = inRecBounds.removeFromLeft(spacer + 25);
 	buttonBounds = inRecBounds.removeFromLeft(comboW);
@@ -356,7 +363,7 @@ void TOPIARYUTILITYCOMPONENT::paint(Graphics& g)
 	h = 48;
 
 	auto swapPresetsArea = Rectangle<int>(posX, posY, w, h);
-	g.drawText("Swap Preset Definitions", posX + lineWidth, posY + lineWidth, 500, labelOffset, juce::Justification::centredLeft);
+	g.drawText("Swap Preset Definition", posX + lineWidth, posY + lineWidth, 500, labelOffset, juce::Justification::centredLeft);
 
 	recBounds = swapPresetsArea.removeFromBottom(swapPresetsArea.getHeight() - labelOffset);
 	g.drawRoundedRectangle((float)recBounds.getX() + lineWidth, (float)recBounds.getY() + lineWidth, (float)recBounds.getWidth() - 2 * lineWidth, (float)recBounds.getHeight() - 2 * lineWidth, (float)lineWidth, (float)lineWidth);
@@ -364,7 +371,7 @@ void TOPIARYUTILITYCOMPONENT::paint(Graphics& g)
 	// turn it into inner rectangle
 	inRecBounds = Rectangle<int>::Rectangle(recBounds.getX() + 3 * lineWidth, recBounds.getY() + 3 * lineWidth, recBounds.getWidth() - 6 * lineWidth, recBounds.getHeight() - 6 * lineWidth);
 
-	g.drawText("From                 To", posX + spacer, posY + lineWidth + 20, 500, labelOffset, juce::Justification::centredLeft);
+	g.drawText("From                    To", posX + spacer, posY + lineWidth + 20, 500, labelOffset, juce::Justification::centredLeft);
 
 	buttonBounds = inRecBounds.removeFromLeft(spacer + 25);
 	buttonBounds = inRecBounds.removeFromLeft(comboW);
@@ -377,6 +384,8 @@ void TOPIARYUTILITYCOMPONENT::paint(Graphics& g)
 	buttonBounds = inRecBounds.removeFromLeft(spacer - 2);
 	buttonBounds = inRecBounds.removeFromLeft(buttonW);
 	pSwapGoButton.setBounds(buttonBounds);
+#endif
+
 
 } // paint
 
@@ -427,7 +436,6 @@ void TOPIARYUTILITYCOMPONENT::getVariationControl()
 			//Logger::outputDebugString(String("output ") + MidiMessage::getMidiNoteName(switches[i], true, true, 5));
 
 		}
-
 	}
 
 } // getVariationControl

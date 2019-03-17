@@ -46,7 +46,7 @@ TopiaryAudioProcessor::TopiaryAudioProcessor()
 	)
 #endif
 {
-
+	processedMidi.ensureSize(50000);
 }
 
 /////////////////////////////////////////////////////////////////////////
@@ -146,7 +146,7 @@ void TopiaryAudioProcessor::prepareToPlay(double sampleRate, int samplesPerBlock
 	ignoreUnused(samplesPerBlock);
 	model.setSampleRate(sampleRate);
 	model.setBlockSize(samplesPerBlock);
-	//setLatencySamples(samplesPerBlock / 10); debug for testing - works equally fine
+	setLatencySamples((int) sampleRate / 1000); //debug for testing - works equally fine
 }  // prepareToPlay
 
 /////////////////////////////////////////////////////////////////////////
@@ -189,6 +189,13 @@ void TopiaryAudioProcessor::processBlock(AudioBuffer<float>& buffer, MidiBuffer&
 {
 	// the audio buffer in a midi effect will have zero channels!
 	jassert(buffer.getNumChannels() == 0);
+
+	// processedMidi is declared as a member - because we preallocate plenty of space to avoid a mallo should it run out of space!!!
+	// midibuffer object to hold what we generate
+	// at the end of the processorblock we will swap &midiMessages (that came in) by processedMidi (what goes out)
+	// but I need to clear it because it may still have data in it from previous run
+
+	processedMidi.data.clearQuick();
 
 	model.setBlockSize(buffer.getNumSamples());
 	buffer.clear();
@@ -239,8 +246,7 @@ void TopiaryAudioProcessor::processBlock(AudioBuffer<float>& buffer, MidiBuffer&
 		runState = Topiary::Running;
 	}
 
-	MidiBuffer processedMidi;   	// midibuffer object to hold what we generate
-									// at the end of the processorblock we will swap &midiMessages (that came in) by processedMidi (what goes out)
+	
 	MidiMessage msg;
 	bool logMidiIn, logMidiOut;	
 	model.getMidiLogSettings(logMidiIn, logMidiOut);
@@ -248,28 +254,33 @@ void TopiaryAudioProcessor::processBlock(AudioBuffer<float>& buffer, MidiBuffer&
 
 
 	// first see if there are (CC) messages to be output by the model
+#ifdef PRESETZ
 	model.outputModelEvents(processedMidi);
+#endif
 
 	int ignore;  // for the samplePosition in getnextEvent - we ignore that c'se we process immeditately
 	for (MidiBuffer::Iterator it(midiMessages); it.getNextEvent(msg, ignore);)
 	{
 		if (msg.isNoteOn())
 		{
-			// if we are ready to play and waiting for first note in, start playing
-			if (waitFFN && (runState == Topiary::Armed))
-			{
-				tellModelToRun();
-				runState = Topiary::Running;
-			}
+			if (!model.midiLearn(msg)) {
+				// if we are ready to play and waiting for first note in, start playing
+				if (waitFFN && (runState == Topiary::Armed))
+				{
+					tellModelToRun();
+					runState = Topiary::Running;
+				}
 
-			model.processAutomation(msg); // because we may have switching by notes!
+				model.processAutomation(msg); // because we may have switching by notes
+			}
 		}
 		else
 		{
 			if (msg.isController())
 			{
-				model.processAutomation(msg);  // automation by cc messages 
-				model.processCC(msg, &processedMidi);
+				model.processAutomation(msg);  // automation by cc messages
+				if (!model.midiLearn(msg))
+					model.processCC(msg, &processedMidi);
 			}
 			else
 			{
@@ -367,7 +378,7 @@ void TopiaryAudioProcessor::processBlock(AudioBuffer<float>& buffer, MidiBuffer&
 
 	if ((runState == Topiary::Running) || (runState == Topiary::Ending))
 	{
-		model.generateMidi(&processedMidi);
+		model.generateMidi(&processedMidi, &midiMessages); // midiMessages might contain data to record
 	}
 
 	midiMessages.swapWith(processedMidi);
