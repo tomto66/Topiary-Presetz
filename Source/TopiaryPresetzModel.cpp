@@ -720,8 +720,8 @@ void TopiaryPresetzModel::swapVariation(int from, int to)
 
 void TopiaryPresetzModel::copyPreset(int from, int to)
 {
-	jassert((from < 8) && (from >= 0));
-	jassert((to < 8) && (to >= 0));
+	jassert((from < PRESETELEMENTS) && (from >= 0));
+	jassert((to < PRESETELEMENTS) && (to >= 0));
 
 	const GenericScopedLock<SpinLock> myScopedLock(lockModel);
 
@@ -856,5 +856,14 @@ bool TopiaryPresetzModel::midiLearn(MidiMessage m)
 
 /////////////////////////////////////////////////////////////////////////////
 
+void TopiaryPresetzModel::getVariationNames(String vNames[8])
+{
+	for (int v = 0; v < 8; v++)
+	{
+		vNames[v] = variation[v].name;
+	}
+} // getVariationNames
 
+
+/////////////////////////////////////////////////////////////////////////////
 #include "../../Topiary/Source/TopiaryMidiLearnEditor.cpp"

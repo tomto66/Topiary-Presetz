@@ -47,7 +47,7 @@ public:
 	bool processVariationSwitch() override;
 	bool switchingVariations() override;
 	void getVariationDetailForGenerateMidi(XmlElement** parent, XmlElement** noteChild, int& parentLength, bool& ending, bool& ended) override;
-	void generateMidi(MidiBuffer* midiBuffer) override;
+	void generateMidi(MidiBuffer* midiBuffer, MidiBuffer* recBuffer) override;
 	void initializeVariationsForRunning() override;
 	void addParametersToModel() override;
 	void restoreParametersToModel() override;
@@ -59,8 +59,9 @@ public:
 	void copyVariation(int from, int to) override;
 	void swapPreset(int from, int to) override;
 	void copyPreset(int from, int to) override;
+	void getVariationNames(String vNames[8]);
 
-#define PRESETELEMENTS 8
+#define PRESETELEMENTS 12
 #define PRESETTRANSITIONSTEPS 10
 
 	struct Variation

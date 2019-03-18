@@ -21,30 +21,3 @@ along with Topiary Presetz. If not, see <https://www.gnu.org/licenses/>.
 #include "PresetzPluginEditor.h"
 #include "../../Topiary/Source/PluginEditor.cpp"
 
-/*
-//==============================================================================
-TopiaryPresetzAudioProcessorEditor::TopiaryPresetzAudioProcessorEditor (TopiaryPresetzAudioProcessor& p)
-    : AudioProcessorEditor (&p), processor (p)
-{
-	setSize(TopiaryPresetzComponent::width, TopiaryPresetzComponent::heigth);
-	presetzModel = processor.getModel();
-	topiaryPresetzComponent.setModel(presetzModel);
-	addAndMakeVisible(topiaryPresetzComponent);
-}
-
-TopiaryPresetzAudioProcessorEditor::~TopiaryPresetzAudioProcessorEditor()
-{
-}
-
-//==============================================================================
-void TopiaryPresetzAudioProcessorEditor::paint (Graphics& g)
-{
-	UNUSED(g)
-	topiaryPresetzComponent.setBounds(getLocalBounds());
-}
-
-void TopiaryPresetzAudioProcessorEditor::resized()
-{
-    
-}
-*/

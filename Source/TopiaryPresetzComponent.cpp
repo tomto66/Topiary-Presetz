@@ -22,13 +22,11 @@ along with Topiary Presetz. If not, see <https://www.gnu.org/licenses/>.
 
 const int TopiaryPresetzComponent::headerHeigth = 75;
 const int TopiaryPresetzComponent::width = 1000;
-const int TopiaryPresetzComponent::heigth = 500;
+const int TopiaryPresetzComponent::heigth = 630;
 
 TopiaryPresetzComponent::TopiaryPresetzComponent()
 {   // don't do too much - model needs to be set first !!
-	//getLookAndFeel().setColour(Component:: , Topiary::SLIDER_TRACE_COLOUR);
-	//jassert(false);
-}
+} // TopiaryPresetzComponent
 
 void TopiaryPresetzComponent::setModel(TopiaryPresetzModel* model)
 {
@@ -37,7 +35,7 @@ void TopiaryPresetzComponent::setModel(TopiaryPresetzModel* model)
 	addAndMakeVisible(topiaryPresetzHeaderComponent);
 	topiaryPresetzTabbedComponent.setModel(presetzModel);
 	addAndMakeVisible(topiaryPresetzTabbedComponent); // size set in tabbedComponent 	
-}
+} // setModel
 
 /////////////////////////////////////////////////////////////////////////
 

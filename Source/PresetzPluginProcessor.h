@@ -21,7 +21,7 @@ along with Topiary Presetz. If not, see <https://www.gnu.org/licenses/>.
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "TopiaryPresetzModel.h" 
 #define TOPIARYMODEL TopiaryPresetzModel
-#define TOPIARYEDITORCOMPONENTS TopiaryPresetzComponent
+#define TOPIARYEDITORCOMPONENT TopiaryPresetzComponent
 
 #include "../../Topiary/Source/PluginProcessor.h"
 

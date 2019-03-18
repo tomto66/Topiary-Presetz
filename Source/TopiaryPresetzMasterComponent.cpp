@@ -25,7 +25,6 @@ TopiaryPresetzMasterComponent::TopiaryPresetzMasterComponent()
 
 	variation = 0;
 	getVariationCalledFromChangeInVariationButton = false;
-	variationDefinitionComponent.setParent(this);
 	addAndMakeVisible(variationDefinitionComponent);
 
 	/////////////////////////////////
@@ -142,7 +141,7 @@ void TopiaryPresetzMasterComponent::setModel(TopiaryPresetzModel* m)
 		getPresetElementData(p); // get the data	
 		presetElement[p].inCCEditor.setModel(presetzModel, p + TopiaryLearnMidiId::presetMidiCin);  // for Midi  learning
 	}
-
+	variationDefinitionComponent.setParent(this);
 	variationDefinitionComponent.variationCombo.setSelectedId(1);
 }
 
@@ -157,7 +156,7 @@ void TopiaryPresetzMasterComponent::paint(Graphics& g)
 	g.setColour(TopiaryColour::foreground);
 	g.setFont(12.0f);
 
-	variationDefinitionComponent.setBounds(500, 288, variationDefinitionComponent.width, variationDefinitionComponent.heigth);
+	variationDefinitionComponent.setBounds(500, 428, variationDefinitionComponent.width, variationDefinitionComponent.heigth);
 
 	//// preset elements
 
@@ -171,25 +170,28 @@ void TopiaryPresetzMasterComponent::paint(Graphics& g)
 	presetElement[6].setBounds(500, 150, presetElement[6].width, presetElement[1].heigth);
 	presetElement[7].setBounds(745, 150, presetElement[7].width, presetElement[1].heigth);
 
-
+	presetElement[8].setBounds(10, 290, presetElement[4].width, presetElement[0].heigth);
+	presetElement[9].setBounds(255, 290, presetElement[5].width, presetElement[1].heigth);
+	presetElement[10].setBounds(500, 290, presetElement[6].width, presetElement[1].heigth);
+	presetElement[11].setBounds(745, 290, presetElement[7].width, presetElement[1].heigth);
 
 	//// Settings
 
-	g.drawText("Settings", 10, 290, 500, labelOffset, juce::Justification::centredLeft);
-	g.drawRoundedRectangle((float)lineSize + 10, (float)305, (float)475, (float)60, (float)4, (float)lineSize);
+	g.drawText("Settings", 10, 430, 500, labelOffset, juce::Justification::centredLeft);
+	g.drawRoundedRectangle((float)lineSize + 10, (float)445, (float)475, (float)60, (float)4, (float)lineSize);
 
-	WFFNButton.setBounds(20, 310, 100, buttonH);
+	WFFNButton.setBounds(20, 450, 100, buttonH);
 
-	notePassThroughButton.setBounds(130, 310, 100, buttonH);
+	notePassThroughButton.setBounds(130, 450, 100, buttonH);
 
 	g.setColour(Colours::white);
 	
-	g.drawText("Q Variation Start:", 250, 310, 200, labelOffset + 3, juce::Justification::centredLeft);
-	quantizeVariationStartCombo.setBounds(350, 310, 110, buttonH);
+	g.drawText("Q Variation Start:", 250, 450, 200, labelOffset + 3, juce::Justification::centredLeft);
+	quantizeVariationStartCombo.setBounds(350, 450, 110, buttonH);
 
-	nameEditor.setBounds(20, 340, 210, buttonH);
-	saveButton.setBounds(250, 340,100,buttonH);   
-	loadButton.setBounds(360, 340, 100, buttonH);
+	nameEditor.setBounds(20, 480, 210, buttonH);
+	saveButton.setBounds(250, 480,100,buttonH);   
+	loadButton.setBounds(360, 480, 100, buttonH);
 	
 } // paint
 
@@ -429,3 +431,17 @@ void TopiaryPresetzMasterComponent::setRTValue(int p, int v)
 }  // setRTValue
 
 ///////////////////////////////////////////////////////////////////////////
+
+void TopiaryPresetzMasterComponent::fillVariationCombo()
+{
+	if (variationDefinitionComponent.variationCombo.getNumItems() >0)
+		variationDefinitionComponent.variationCombo.clear(dontSendNotification);
+	String vNames[8];
+	presetzModel->getVariationNames(vNames);
+	for (int v = 0; v < 8; v++)
+	{
+		variationDefinitionComponent.variationCombo.addItem(String(v+1) + " " + vNames[v], v+1);
+	}
+	variationDefinitionComponent.variationCombo.setSelectedId(variation + 1, dontSendNotification);
+
+} // fillVariationCombo
