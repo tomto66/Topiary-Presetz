@@ -139,7 +139,7 @@ void TopiaryPresetzMasterComponent::setModel(TopiaryPresetzModel* m)
 	{
 		presetElement[p].setParent(this, p); // it sets its own size
 		getPresetElementData(p); // get the data	
-		presetElement[p].inCCEditor.setModel(presetzModel, p + TopiaryLearnMidiId::presetMidiCin);  // for Midi  learning
+		presetElement[p].inCCEditor.setModel(presetzModel, p + Topiary::LearnMidiId::presetMidiCin);  // for Midi  learning
 	}
 	variationDefinitionComponent.setParent(this);
 	variationDefinitionComponent.variationCombo.setSelectedId(1);

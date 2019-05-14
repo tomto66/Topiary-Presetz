@@ -40,7 +40,7 @@ public:
 	void getVariationDefinition();
 	void setVariationDefinition();
 	void setRTValue(int p, int v);   // does NOT output in real time !!!
-
+	void fillVariationCombo();
 
 private:
 	TopiaryPresetzModel* presetzModel;

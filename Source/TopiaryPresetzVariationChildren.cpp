@@ -31,14 +31,7 @@ along with Topiary Presetz. If not, see <https://www.gnu.org/licenses/>.
 	{
 		setSize(width, heigth);
 		addAndMakeVisible(variationCombo);
-		variationCombo.addItem("Variation 1", 1);
-		variationCombo.addItem("Variation 2", 2);
-		variationCombo.addItem("Variation 3", 3);
-		variationCombo.addItem("Variation 4", 4);
-		variationCombo.addItem("Variation 5", 5);
-		variationCombo.addItem("Variation 6", 6);
-		variationCombo.addItem("Variation 7", 7);
-		variationCombo.addItem("Variation 8", 8);
+		//variationCombo.addItem("-", 1); // dummy so fillVariationCombo does not crash
 		
 		variationCombo.onChange = [this]
 		{
@@ -66,6 +59,7 @@ along with Topiary Presetz. If not, see <https://www.gnu.org/licenses/>.
 		nameEditor.onReturnKey = [this]
 		{
 			parent->setVariationDefinition();
+			parent->fillVariationCombo();
 		};
 
 		addAndMakeVisible(enableButton);
@@ -83,6 +77,7 @@ along with Topiary Presetz. If not, see <https://www.gnu.org/licenses/>.
 	void VariationDefinitionComponent::setParent(TopiaryPresetzMasterComponent* p)
 	{
 		parent = p;
+		parent->fillVariationCombo();
 	} // setparent
 
 	///////////////////////////////////////////////////////////////////////////////////

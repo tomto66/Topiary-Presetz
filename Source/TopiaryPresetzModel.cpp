@@ -21,7 +21,7 @@ along with Topiary Presetz. If not, see <https://www.gnu.org/licenses/>.
 #include "TopiaryPresetzModel.h"
 
 // following has std model code that can be included (cannot be in TopiaryModel because of variable definitions)
-#include"../../Topiary/Source/TopiaryModelIncludes.cpp"
+#include"../../Topiary/Source/TopiaryModel.cpp.h"
 
 void TopiaryPresetzModel::saveStateToMemoryBlock(MemoryBlock& destData)
 {
@@ -66,7 +66,6 @@ void TopiaryPresetzModel::addParametersToModel()
 	addBoolToModel(parameters, logVariations, "logVariations");
 	addBoolToModel(parameters, logInfo, "logInfo");
 	addStringToModel(parameters, filePath, "filePath");
-	addIntToModel(parameters, numPatterns, "numPatterns");
 	
 	addIntToModel(parameters, variationSwitchChannel, "variationSwitchChannel");
 	addBoolToModel(parameters, ccVariationSwitching, "ccVariationSwitching");
@@ -76,7 +75,6 @@ void TopiaryPresetzModel::addParametersToModel()
 		// addIntToModel(parameters, variation[i].lenInTicks, "lenInTicks", i); not needed; len is always measure!
 		addStringToModel(parameters, variation[i].name, "variationName", i);
 		addBoolToModel(parameters, variation[i].enabled, "variationEnabled", i);
-		addBoolToModel(parameters, variation[i].ending, "variationEnding", i);
 		addIntToModel(parameters, variation[i].timing, "variationTiming", i);
 		for (int j = 0; j < PRESETELEMENTS; j++)
 		{
@@ -103,29 +101,6 @@ void TopiaryPresetzModel::addParametersToModel()
 } // addParametersToModel
 
 /////////////////////////////////////////////////////////////////////////
-/*if (filePath.compare("") == 0)
-		directory = File::File(filePath);
-void TopiaryPresetzModel::savePreset(File f)
-{
-	addParametersToModel();  // this adds and XML element "Parameters" to the model
-	//String myXmlDoc = model->createDocument(String());
-	//f.replaceWithText(myXmlDoc);
-	//Logger::writeToLog(myXmlDoc);
-
-	// now delete the no-longer-needed "Parameters" child
-	model->deleteAllChildElementsWithTagName("Parameters");
-
-} // savePreset
-
-//////////////////////////////////////////////////////////////////////////////////////////////////
-
-void TopiaryPresetzModel::loadPreset(File f)
-{
-	model.reset(XmlDocument::parse(f));
-	restoreParametersToModel();
-} // loadPreset
-*/
-//////////////////////////////////////////////////////////////////////////////////////////////////
 
 void TopiaryPresetzModel::restoreParametersToModel()
 { 
@@ -171,7 +146,6 @@ void TopiaryPresetzModel::restoreParametersToModel()
 				if (parameterName.compare("logInfo") == 0)	logInfo = parameter->getBoolAttribute("Value");
 
 				if (parameterName.compare("filePath") == 0)	filePath = parameter->getStringAttribute("Value");
-				if (parameterName.compare("numPatterns") == 0) numPatterns = parameter->getIntAttribute("Value");
 				
 				// variations 
 				if (parameterName.compare("variationName") == 0) variation[parameter->getIntAttribute("Index")].name = parameter->getStringAttribute("Value");
@@ -235,8 +209,6 @@ TopiaryPresetzModel::TopiaryPresetzModel()
 	variationStartQ = Topiary::Quantization::Immediate;
 	switchVariation = Topiary::VariationSwitch::SwitchFromStart;
 
-	numPatterns = 1; // needed otherwise transport won't run - later on there will be a generated pattern to store the transition
-
 	logString = "";
 	Log(String("Topiary Presetz V ") + String(xstr(JucePlugin_Version)) + String(" (c) Tom Tollenaere 2018-2019."), Topiary::LogType::License);
 	Log(String(""), Topiary::LogType::License);
@@ -282,24 +254,25 @@ TopiaryPresetzModel::TopiaryPresetzModel()
 		variation[v].name = "---";
 		variation[v].enabled = false;
 		variation[v].lenInTicks = 1; // unused for now
-		variation[v].lenInTicks = Topiary::TICKS_PER_QUARTER * numerator; // always 1 measure long 
-		variation[v].ending = true;  // indicates this pattern  only runs once; needed in generateMidi (otherwise it will loop)
+		variation[v].lenInTicks = Topiary::TicksPerQuarter * numerator; // always 1 measure long 
+		variation[v].type = Topiary::VariationTypeEnd;  // indicates this pattern  only runs once; needed in generateMidi (otherwise it will loop)
 		variation[v].timing = Topiary::Quantization::Immediate;
 		variationSwitch[v] = ccStart;
-		variation[v].currentPatternChild = nullptr;
-		variation[v].pattern = new XmlElement("Transition");
+		variation[v].currentPatternChild = 0;
+		
 		ccStart++;
 
 		for (int i = 0; i < PRESETELEMENTS; i++)
 		{
 			variation[v].presetValue[i] = 63;
 		}	
+
+		variation[v].pattern.patLenInTicks = Topiary::TicksPerQuarter * 8; //just to be safe :)
+		variation[v].pattern.numItems = 0;
 	}
 
 	variationSelected = 0;
 	variationRunning = 0;
-	
-	topiaryThread.notify();
 	
 } // TopiaryPresetzModel
 
@@ -307,29 +280,9 @@ TopiaryPresetzModel::TopiaryPresetzModel()
 
 TopiaryPresetzModel::~TopiaryPresetzModel()
 {
-	XmlElement toDelete("toDelete");
-
-	for (int i = 0; i < 8; ++i)
-	{
-		// ensure these will get destroyed
-		toDelete.addChildElement(variation[i].pattern);
-
-	}
 	
 } //~TopiaryPresetzModel
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////
-/* moved to modelIncludes
-void TopiaryPresetzModel::getVariationDetailForGenerateMidi(XmlElement** parent, XmlElement** noteChild, int& parentLength, bool& ending, bool& ended)
-{
-	parentLength = variation[variationRunning].lenInTicks;
-	ending = variation[variationRunning].ending;
-	ended = variation[variationRunning].ended;
-	*parent = variation[variationRunning].pattern;
-	*noteChild = variation[variationRunning].currentPatternChild;
-
-} // getVariationDetailForGenerateMidi
-*/
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void TopiaryPresetzModel::setRTValue(int p, int value, int channel, int CC)
@@ -337,7 +290,7 @@ void TopiaryPresetzModel::setRTValue(int p, int value, int channel, int CC)
 	jassert((p >= 0) && (p < PRESETELEMENTS));
 	presetRTValue[p] = value;
 
-	const GenericScopedLock<SpinLock> myScopedLock(lockModel);
+	const GenericScopedLock<CriticalSection> myScopedLock(lockModel);
 	// output a CC value!!
 	MidiMessage msg;
 	msg = MidiMessage::controllerEvent(channel, CC, value);
@@ -496,7 +449,7 @@ void TopiaryPresetzModel::setVariationDefinition(int v, bool enabled, String vna
 	
 	if (saved)
 	{
-		variation[v].lenInTicks = Topiary::TICKS_PER_QUARTER * numerator;
+		variation[v].lenInTicks = Topiary::TicksPerQuarter * numerator;
 		broadcaster.sendActionMessage(MsgVariationEnables);  // may need to update the enable buttons
 		Log("Variation " + String(v+1) + " saved.", Topiary::LogType::Info);
 	};
@@ -510,7 +463,7 @@ void TopiaryPresetzModel::initializeVariationsForRunning()
 	for (int v = 0; v < 8; v++)
 	{
 		variation[v].ended = true;
-		variation[v].currentPatternChild = nullptr;
+		variation[v].currentPatternChild = 0;
 	}
 } // initializeVariationsForRunning
 
@@ -527,73 +480,35 @@ void TopiaryPresetzModel::generateTransition()
 	// - transitionSpeed ( Measure, Beat for now )
 	// - RTvalues of the controlled elements ( presetRTValue[] )
 	// - transitionTiming as defined in the variation
-	// Generates locally, swaps at end of generation and swap protected by model spinlock
-	// sets generatingTransition in the model to signal we're busy generating
-	
-	auto transition = new XmlElement("Transition");
-	int vSelected = variationSelected;
-	
+		
+	variation[variationSelected].pattern.numItems = 0;
+
 	int transitionTiming = variation[variationSelected].timing;
 
 	int length = 0;
 
 	if (transitionTiming == Topiary::Quantization::Measure)
-		length = Topiary::TICKS_PER_QUARTER * numerator;
+		length = Topiary::TicksPerQuarter * numerator;
 	if (transitionTiming == Topiary::Quantization::Half)
-		length = Topiary::TICKS_PER_QUARTER * 2;
+		length = Topiary::TicksPerQuarter * 2;
 	if (transitionTiming == Topiary::Quantization::Quarter)
-		length = Topiary::TICKS_PER_QUARTER;
+		length = Topiary::TicksPerQuarter;
 	if (transitionTiming == Topiary::Quantization::Immediate)
-		length = (int) Topiary::TICKS_PER_QUARTER/16;
+		length = (int) Topiary::TicksPerQuarter/16;
 
 	jassert((transitionTiming == Topiary::Quantization::Measure) || (transitionTiming == Topiary::Quantization::Quarter) || (transitionTiming == Topiary::Quantization::Half)  || (transitionTiming == Topiary::Quantization::Immediate));
 	// others not implemented (yet)
 	
 	for (int p = 0; p < PRESETELEMENTS; p++)
 	{
-		generateTransition(p, variationSelected, transition, length);
+		generateTransition(p, variationSelected, length);
 	}
 
 	// sort the children under transition
-	renumberByTimestamp(transition); 
-
-	//Logger::writeToLog("-------------------- TRANSITION GENERATED ---------------------");
-	String myXmlDoc2 = transition->createDocument(String());
-	Logger::writeToLog(myXmlDoc2);
-	Logger::writeToLog("Transition from "+String(transitioningFrom)+" to "+String(transitioningTo)+" generated.");
-
-	// set spinlock
-	const GenericScopedLock<SpinLock> myScopedLock(lockModel);
-
-	swapXmlElementPointers(&(variation[vSelected].pattern), &transition);
-	variation[vSelected].currentPatternChild = nullptr;
-	delete transition;
-	transitioningFrom = -1;
-	transitioningTo = -1;
-	threadRunnerState = Topiary::ThreadRunnerState::DoneGenerating;
-	// free spinLock
+	variation[variationSelected].pattern.renumber(); 
+	variation[variationSelected].ended = false;
 	
 } // generateTransition
-
-///////////////////////////////////////////////////////////////////////
-
-void TopiaryPresetzModel::threadRunner()
-{
-	if (variationRunning == variationSelected) return; // nothing to do (should not be called either)
-
-	// to avoid another transition running; set variation[variationRunning].ended = true (that will stop generateMidi)
-	variation[variationRunning].ended = true;
-	variation[variationSelected].ended = true;
-	//Logger::outputDebugString("RUNNER: set variation[" + String(variationRunning) + "].ended TRUE");
-
-	generateTransition();  // this one sets transitioningFrom and transitioningTo
-
-	//Logger::outputDebugString("RUNNER: set variation{" + String(variationSelected) + "].ended FALSE");
-	variation[variationSelected].ended = false; // so it can start running
-	variation[variationRunning].ended = false;
-	//Logger::outputDebugString("RUNNER: Variation ready for transition ------------------------>");
-
-} // threadRunner
 
 ///////////////////////////////////////////////////////////////////////
 
@@ -630,16 +545,15 @@ void TopiaryPresetzModel::copyVariation(int from, int to)
 {
 	jassert((from < 8) && (from >= 0));
 	jassert((to < 8) && (to >= 0));
-
-	const GenericScopedLock<SpinLock> myScopedLock(lockModel);
+	jassert(false);
+	
+	const GenericScopedLock<CriticalSection> myScopedLock(lockModel);
 
 	variation[to].enabled = variation[from].enabled;
 	variation[to].name = variation[from].name + String(" copy");
 	variation[to].lenInTicks = variation[from].lenInTicks;
-	//variation[to].pattern = variation[from].pattern;
-	variation[to].currentPatternChild = nullptr;
-	variation[to].ending = variation[from].ending;
-	variation[to].ended = variation[from].ended;
+	variation[to].currentPatternChild = 0;
+
 	variation[to].timing = variation[from].timing;
 	for (int i = 0; i < PRESETELEMENTS; i++)
 	{
@@ -649,7 +563,7 @@ void TopiaryPresetzModel::copyVariation(int from, int to)
 	broadcaster.sendActionMessage(MsgMaster);
 	broadcaster.sendActionMessage(MsgVariationEnables);
 	Log("Variation " + String(from+1) + " copied to " + String(to+1) + ".", Topiary::LogType::Info);
-
+	
 } // copyVariation
 
 ///////////////////////////////////////////////////////////////////////
@@ -658,26 +572,22 @@ void TopiaryPresetzModel::swapVariation(int from, int to)
 {
 	jassert((from < 8) && (from >= 0));
 	jassert((to < 8) && (to >= 0));
-
+	jassert(false);
+	
 	bool rEnabled;
 	String rName;
 	int rLenInTicks;
-	XmlElement* rPattern;
-	XmlElement* rCurrentPatternChild;
-	bool rEnding;
-	bool rEnded;
+	int rCurrentPatternChild;
 	int rTiming;
 	int rPresetValue[PRESETELEMENTS];
 
-	const GenericScopedLock<SpinLock> myScopedLock(lockModel);
+	const GenericScopedLock<CriticalSection> myScopedLock(lockModel);
 
 	rEnabled = variation[from].enabled;
 	rName = variation[from].name;
 	rLenInTicks = variation[from].lenInTicks;
-	rPattern = variation[from].pattern;
 	rCurrentPatternChild = variation[from].currentPatternChild;
-	rEnding = variation[from].ending;
-	rEnded = variation[from].ended;
+
 	rTiming = variation[from].timing;
 	for (int i = 0; i < PRESETELEMENTS; i++)
 	{
@@ -687,10 +597,8 @@ void TopiaryPresetzModel::swapVariation(int from, int to)
 	variation[from].enabled = variation[to].enabled;
 	variation[from].name = variation[to].name;
 	variation[from].lenInTicks = variation[to].lenInTicks;
-	variation[from].pattern = variation[to].pattern;
 	variation[from].currentPatternChild = variation[to].currentPatternChild;
-	variation[from].ending = variation[to].ending;
-	variation[from].ended = variation[to].ended;
+
 	variation[from].timing = variation[to].timing;
 	for (int i = 0; i < PRESETELEMENTS; i++)
 	{
@@ -700,10 +608,8 @@ void TopiaryPresetzModel::swapVariation(int from, int to)
 	variation[to].enabled = rEnabled;
 	variation[to].name = rName;
 	variation[to].lenInTicks = rLenInTicks;
-	variation[to].pattern = rPattern;
 	variation[to].currentPatternChild = rCurrentPatternChild;
-	variation[to].ending = rEnding;
-	variation[to].ended = rEnded;
+
 	variation[to].timing = rTiming;
 	for (int i = 0; i < PRESETELEMENTS; i++)
 	{
@@ -713,7 +619,7 @@ void TopiaryPresetzModel::swapVariation(int from, int to)
 	broadcaster.sendActionMessage(MsgMaster);
 	broadcaster.sendActionMessage(MsgVariationEnables);
 	Log("Variation " + String(from+1) + " swapped with " + String(to+1) + ".", Topiary::LogType::Info);
-
+	
 } // swapVariation
 
 /////////////////////////////////////////////////////////////////////////////
@@ -722,8 +628,9 @@ void TopiaryPresetzModel::copyPreset(int from, int to)
 {
 	jassert((from < PRESETELEMENTS) && (from >= 0));
 	jassert((to < PRESETELEMENTS) && (to >= 0));
-
-	const GenericScopedLock<SpinLock> myScopedLock(lockModel);
+	jassert(false);
+	
+	const GenericScopedLock<CriticalSection> myScopedLock(lockModel);
 
 	presetDefinition[to].name = presetDefinition[from].name + String(" copy");
 	presetDefinition[to].fromValue = presetDefinition[from].fromValue;
@@ -742,7 +649,7 @@ void TopiaryPresetzModel::copyPreset(int from, int to)
 
 	broadcaster.sendActionMessage(MsgMaster);
 	Log("Preset " + String(from+1) + " copied to " + String(to+1) + ".", Topiary::LogType::Info);
-
+	
 } // copyPreset
 
 /////////////////////////////////////////////////////////////////////////////
@@ -761,7 +668,7 @@ void TopiaryPresetzModel::swapPreset(int from, int to)
 	int rOutChannel;
 	bool rEnabled;
 
-	const GenericScopedLock<SpinLock> myScopedLock(lockModel);
+	const GenericScopedLock<CriticalSection> myScopedLock(lockModel);
 
 	rName = presetDefinition[to].name;
 	rFromValue = presetDefinition[to].fromValue;
@@ -809,7 +716,7 @@ void TopiaryPresetzModel::swapPreset(int from, int to)
 bool TopiaryPresetzModel::midiLearn(MidiMessage m)
 {
 	// called by processor; if midiLearn then learn based on what came in
-	const GenericScopedLock<SpinLock> myScopedLock(lockModel);
+	const GenericScopedLock<CriticalSection> myScopedLock(lockModel);
 	bool remember = learningMidi;
 	if (learningMidi)
 	{
@@ -819,7 +726,7 @@ bool TopiaryPresetzModel::midiLearn(MidiMessage m)
 		if (note || cc)
 		{
 			// check the Id to learn; tells us what to set
-			if ((midiLearnID >= TopiaryLearnMidiId::variationSwitch) && (midiLearnID < (TopiaryLearnMidiId::variationSwitch+8)))
+			if ((midiLearnID >= Topiary::LearnMidiId::variationSwitch) && (midiLearnID < (Topiary::LearnMidiId::variationSwitch+8)))
 			{
 				// learning variation switch
 				if (note)
@@ -836,12 +743,12 @@ bool TopiaryPresetzModel::midiLearn(MidiMessage m)
 				Log("Midi learned", Topiary::LogType::Warning);
 				broadcaster.sendActionMessage(MsgVariationAutomation);	// update utility tab
 			}
-			else if ((midiLearnID >= TopiaryLearnMidiId::presetMidiCin) && (midiLearnID < (TopiaryLearnMidiId::presetMidiCin + 8)))
+			else if ((midiLearnID >= Topiary::LearnMidiId::presetMidiCin) && (midiLearnID < (Topiary::LearnMidiId::presetMidiCin + 8)))
 			{
 
 				if (cc)
 				{
-					presetDefinition[midiLearnID- TopiaryLearnMidiId::presetMidiCin].inCC = m.getControllerNumber();
+					presetDefinition[midiLearnID- Topiary::LearnMidiId::presetMidiCin].inCC = m.getControllerNumber();
 					learningMidi = false;
 					Log("Midi learned", Topiary::LogType::Warning);
 					broadcaster.sendActionMessage(MsgMaster);	// update master
@@ -866,4 +773,4 @@ void TopiaryPresetzModel::getVariationNames(String vNames[8])
 
 
 /////////////////////////////////////////////////////////////////////////////
-#include "../../Topiary/Source/TopiaryMidiLearnEditor.cpp"
+#include "../../Topiary/Source/TopiaryMidiLearnEditor.cpp.h"

@@ -16,7 +16,13 @@ You should have received a copy of the GNU General Public License
 along with Topiary Presetz. If not, see <https://www.gnu.org/licenses/>.
 */
 /////////////////////////////////////////////////////////////////////////////
-
 #pragma once
-#include "TopiaryPresetzLogComponent.h"
-#include "../../Topiary/Source/TopiaryLogComponent.cpp.h"
+#define PRESETZ
+#define TOPIARYMODEL TopiaryPresetzModel
+#define TOPIARYLOGCOMPONENT TopiaryPresetzLogComponent
+#define TOPIARYUTILITYCOMPONENT TopiaryPresetzUtilityComponent
+#define TOPIARYTRANSPORTCOMPONENT TopiaryPresetzTransportComponent
+
+#define MAXVARIATIONITEMS 120
+#define PRESETELEMENTS 12
+#define TRANSITIONSTEPS (int)(MAXVARIATIONITEMS/PRESETELEMENTS)

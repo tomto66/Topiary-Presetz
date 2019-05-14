@@ -20,7 +20,6 @@ along with Topiary Presetz. If not, see <https://www.gnu.org/licenses/>.
 #pragma once
 #include "TopiaryPresetzMasterComponent.h"
 #include "TopiaryPresetzLogComponent.h"
-#include "TopiaryPresetzRealTimeComponent.h"
 #include "TopiaryPresetzComponent.h"
 #include "TopiaryPresetzUtilityComponent.h"
 

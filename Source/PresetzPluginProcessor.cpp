@@ -19,5 +19,5 @@ along with Topiary Presetz. If not, see <https://www.gnu.org/licenses/>.
 
 #include "PresetzPluginProcessor.h"
 #include "PresetzPluginEditor.h"
-#include "../../Topiary/Source/PluginProcessor.cpp"
+#include "../../Topiary/Source/PluginProcessor.cpp.h"
 

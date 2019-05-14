@@ -20,18 +20,7 @@ along with Topiary Presetz. If not, see <https://www.gnu.org/licenses/>.
 
 #pragma once
 #include "../../Topiary/Source/TopiaryModel.h"
-#define PRESETZ
-#define TOPIARYMODEL TopiaryPresetzModel
-#define TOPIARYLOGCOMPONENT TopiaryPresetzLogComponent
-#define TOPIARYUTILITYCOMPONENT TopiaryPresetzUtilityComponent
-#define TOPIARYTRANSPORTCOMPONENT TopiaryPresetzTransportComponent
-
-enum TopiaryLearnMidiId
-{
-	variationSwitch = 0, // meaning any 0 <= ID < 8 is learn midi for variation switchers
-	presetMidiCin = 10,
-	other = 20
-};
+#include "TopiaryPresetzVariation.h"
 
 #include "../../Topiary/Source/TopiaryMidiLearnEditor.h"
 
@@ -46,13 +35,11 @@ public:
 	void restoreStateFromMemoryBlock(const void* data, int sizeInBytes) override;
 	bool processVariationSwitch() override;
 	bool switchingVariations() override;
-	void getVariationDetailForGenerateMidi(XmlElement** parent, XmlElement** noteChild, int& parentLength, bool& ending, bool& ended) override;
 	void generateMidi(MidiBuffer* midiBuffer, MidiBuffer* recBuffer) override;
 	void initializeVariationsForRunning() override;
 	void addParametersToModel() override;
 	void restoreParametersToModel() override;
 	void generateTransition();
-	void threadRunner() override;
 	void outputVariationEvents();			// potentially generate events when variation button is pressed (outside of running) - certainly needed for presetz
 	void setOverrideHostTransport(bool o);
 	void swapVariation(int from, int to) override;
@@ -60,9 +47,8 @@ public:
 	void swapPreset(int from, int to) override;
 	void copyPreset(int from, int to) override;
 	void getVariationNames(String vNames[8]);
-
-#define PRESETELEMENTS 12
-#define PRESETTRANSITIONSTEPS 10
+	bool walkToTick(TopiaryVariation* parent, int& childIndex, int toTick);
+	void nextTick(TopiaryVariation* parent, int& childIndex);
 
 	struct Variation
 	{
@@ -70,11 +56,11 @@ public:
 		String name;
 		int lenInTicks;  // unused for now
 		int presetValue[PRESETELEMENTS];
-		XmlElement* pattern; // otherwise audioprocessor won't run
-		XmlElement* currentPatternChild;
-		bool ending;
+		int currentPatternChild;
+		int type = Topiary::VariationTypeEnd;
 		bool ended;
 		int timing; // duration of the transition
+		TopiaryVariation pattern;
 	} override;
 
 	void setVariation(int i);
@@ -84,7 +70,6 @@ public:
 	void getVariationEnables(bool enables[8]);
 	void getVariationDefinition(int v, bool &enabled, String &vname, int presetVal[PRESETELEMENTS], int& timing);
 	void setVariationDefinition(int v, bool enabled, String vname, int presetVal[PRESETELEMENTS], int timing);
-	void setEnded() override;
 
 	struct PresetElementDefinition
 	{
@@ -111,13 +96,14 @@ public:
 
 protected:
 	Variation variation[8];		
+	
 	PresetElementDefinition presetDefinition[PRESETELEMENTS];		// the definitions
 
 	int presetRTValue[PRESETELEMENTS];								// the actual realtime values of where we are in real time (not stored in the presets nor the variations0
 
 	///////////////////////////////////////////////////////////////////////
 
-	void generateTransition(int p, int v, XmlElement *transition, int length)
+	void generateTransition(int p, int v, int length)
 	{
 		// generate the CC msg; depending on the target channel, output it once or 16 times as childs under transition*
 
@@ -128,14 +114,13 @@ protected:
 		{
 			auto generateTransitionCCMsg = [&](int channel, int timestamp, int cc, int value)
 			{
-				// generate one of them for channel
-				XmlElement *newChild = new XmlElement("CC");
-				transition->prependChildElement(newChild);
-				newChild->setAttribute("Timestamp", timestamp);
-				newChild->setAttribute("CC", cc);
-				newChild->setAttribute("Value", value);
-				newChild->setAttribute("Channel", channel);
-				newChild->setAttribute("midiType", Topiary::MidiType::CC);
+				int i = variation[v].pattern.numItems;
+				variation[v].pattern.add();
+				variation[v].pattern.dataList[i].timestamp = timestamp;
+				variation[v].pattern.dataList[i].CC = cc;
+				variation[v].pattern.dataList[i].value = value;
+				variation[v].pattern.dataList[i].midiType = Topiary::MidiType::CC; 
+				variation[v].pattern.dataList[i].channel = channel;
 			};
 
 			/////////////////////////////
@@ -157,11 +142,11 @@ protected:
 			cc = presetDefinition[p].outCC;
 			if (from == to) return; // nothing to do
 
-			float perStepValue = ((float)(to - from) / PRESETTRANSITIONSTEPS);
-			float perStepTimestamp = ((float)length / PRESETTRANSITIONSTEPS);
+			float perStepValue = ((float)(to - from) / TRANSITIONSTEPS);
+			float perStepTimestamp = ((float)length / TRANSITIONSTEPS);
 			target = (float)from + perStepValue;
 			timestamp = 0.0;
-			for (int step = 0; step < (PRESETTRANSITIONSTEPS - 1); step++)
+			for (int step = 0; step < (TRANSITIONSTEPS - 1); step++)
 			{
 				generateTransitionCCMsgs();
 				target = target + perStepValue;
