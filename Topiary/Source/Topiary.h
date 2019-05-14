@@ -29,6 +29,9 @@ along with Topiary. If not, see <https://www.gnu.org/licenses/>.
 
 String validateNote(String newNote);
 int validNoteNumber(String note);
+void boolSwap(bool &a, bool &b);
+void intSwap(int &a, int &b);
+void stringSwap(String &a, String &b);
 
 /////////////////////////////////////////////////////////////////////////////
 
@@ -50,7 +53,7 @@ private:
 
 class Topiary 
 {  public:
-	
+
 	enum VariationButtonIds
 	{
 		VariationButtons = 1001,
@@ -73,7 +76,6 @@ class Topiary
 		Running = 1,     // really running, producing output
 		Recording = 2,   // running & recording (never in performance, only in setup)
 		Armed = 3,  	 // ready to start running  @first note in
-		Ended = 4,       // transport still running, but has produced last note (after an ending pattern; will not produce more notes)
 		Ending = 5		 // stop command given, but finishing the last notes; goes to Ended when totally done
 	};
 
@@ -81,7 +83,8 @@ class Topiary
 	{
 		NoteOn = 1,
 		NoteOff = 2,
-		CC = 3
+		CC = 3,
+		NOP = 99
 	};
 
 	enum Quantization : int
@@ -97,6 +100,15 @@ class Topiary
 		//Thirty2nd = 8
 	};
 
+	enum VariationTypeIds
+	{
+		VariationTypeSteady = 2001,
+		VariationTypeFill = 2002,
+		VariationTypeEnd = 2003,
+		VariationTypeIntro = 2004,
+		VariationTypeRadioID = 2005
+	};
+
 	enum VariationSwitch : int
 	{
 		SwitchFromStart = 1,		// when we switch variation, the pattern starts at the beginning
@@ -108,7 +120,6 @@ class Topiary
 
 	enum LogType : int
 	{
-		Debug = 0,		// low lever info for debugging
 		Warning = 1,	// things that go wrong, user error
 		MidiIn = 2,		// monitor incoming midi
 		MidiOut = 3,	// monitor outgoing midi
@@ -118,15 +129,23 @@ class Topiary
 		License = 7		// License info
 	};
 
-	enum ThreadRunnerState : int
+	enum HeaderType : int
 	{
-		NothingToDo = 2604,
-		Generating = 2605,
-		DoneGenerating = 2607 // meaning it needs to go back to NothingToDo
+		Int = 3604,
+		Bool = 3605,
+		String = 3607,
+		NoteLabel = 3608
 	};
 
-	static const int TICKS_PER_QUARTER = 240;
+	enum LearnMidiId
+	{
+		variationSwitch = 0, // meaning any 0 <= ID < 8 is learn midi for variation switchers
+		presetMidiCin = 10,
+		other = 20
+	};
 
+	static const int TicksPerQuarter = 240;
+	static const int ToDeleteID = 999999999;
 private:
 
 	JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Topiary)
@@ -160,6 +179,7 @@ public:
 	static const Colour warning;
 	static const Colour brightBlue;
 	static const Colour orange;
+	static const Colour rec;
 	static const Colour green;
 	static const Colour yellow;
 	static const Colour lightBlue;
@@ -167,6 +187,8 @@ public:
 	static const Colour paleBlue;
 	static const Colour sliderTrace;
 	static const Colour sliderThumb;
+	static const Colour purple;
+
 private:
 
 	JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(TopiaryColour)
@@ -174,5 +196,3 @@ private:
 }; // TopiaryColour
 
 /////////////////////////////////////////////////////////////////////////////
-
-

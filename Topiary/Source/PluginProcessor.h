@@ -27,7 +27,6 @@ CAREFUL: needs symbols:
 /////////////////////////////////////////////////////////////////////////////
 
 #pragma once
-
 //#include "../JuceLibraryCode/JuceHeader.h"
 //#include "TopiaryPresetzModel.h" 
 
@@ -85,6 +84,9 @@ private:
 	int tellModelToRun()
 	{ // do all that is needed to tell the model to really start running 
 		model.setRunState(Topiary::Running);
+#ifndef PRESETZ
+		model.initializePreviousSteadyVariation();
+#endif
 		model.setSampleRate(getSampleRate());	// see if prepareToPlay is called, if so no need to keep checking this
 		model.setStartTimes();	// and do some housekeeping like set the parents to the correct variation
 		model.initializeVariationsForRunning();

@@ -21,9 +21,9 @@ along with Topiary. If not, see <https://www.gnu.org/licenses/>.
 /////////////////////////////////////////////////////////////////////////////
 
 
-#include "TopiaryTable.h"
+#include "TopiaryTableList.h"
 
-TopiaryTable::TopiaryTable()
+TopiaryTableList::TopiaryTableList()
 {
 	tableComponent.setColour(ListBox::outlineColourId, Colours::grey);
 	tableComponent.setOutlineThickness(1);
@@ -36,25 +36,25 @@ TopiaryTable::TopiaryTable()
 	//tableData->addChildElement(columnList);
 	addAndMakeVisible(tableComponent); // see if we do that here or in setModel
 	
-} // TopiaryTable
+} // TopiaryTableList
 
 //////////////////////////////////////////////////////////////////////////////////////
 
-void TopiaryTable::setHeader()
+void TopiaryTableList::setHeader()
 {
 	headerSet = true;
 } // ~TopiaryTablList
 
 //////////////////////////////////////////////////////////////////////////////////////
 
-bool TopiaryTable::isHeaderSet()
+bool TopiaryTableList::isHeaderSet()
 {
 	return headerSet;
 } // isHeaderSet
 
 //////////////////////////////////////////////////////////////////////////////////////
 
-void TopiaryTable::setModel(TopiaryListModel *m)
+void TopiaryTableList::setModel(TopiaryListModel *m)
 {
 		model = m;
 		if (!headerSet) // if the column has already been set, we are probably loading a new preset; ignore 
@@ -90,7 +90,7 @@ void TopiaryTable::setModel(TopiaryListModel *m)
 //////////////////////////////////////////////////////////////////////////////////////
 
 
-int TopiaryTable::getNumRows() 
+int TopiaryTableList::getNumRows() 
 {
 		return numRows;
 		
@@ -98,7 +98,7 @@ int TopiaryTable::getNumRows()
 
 //////////////////////////////////////////////////////////////////////////////////////
 
-void TopiaryTable::paintRowBackground(Graphics& g, int rowNumber, int /*width*/, int /*height*/, bool rowIsSelected) 
+void TopiaryTableList::paintRowBackground(Graphics& g, int rowNumber, int /*width*/, int /*height*/, bool rowIsSelected) 
 {
 		auto alternateColour = getLookAndFeel().findColour(ListBox::backgroundColourId)
 			.interpolatedWith(getLookAndFeel().findColour(ListBox::textColourId), 0.03f);
@@ -111,7 +111,7 @@ void TopiaryTable::paintRowBackground(Graphics& g, int rowNumber, int /*width*/,
 
 //////////////////////////////////////////////////////////////////////////////////////
 
-void TopiaryTable::paintCell(Graphics& g, int rowNumber, int columnId, int width, int height, bool rowIsSelected) 
+void TopiaryTableList::paintCell(Graphics& g, int rowNumber, int columnId, int width, int height, bool rowIsSelected) 
 {
 	UNUSED(rowIsSelected)
 	// below controls the cell text color; in the demo the ID gets a different color (dark blue - we've taken that out so rowIsSelected is no longer used really)
@@ -133,7 +133,7 @@ void TopiaryTable::paintCell(Graphics& g, int rowNumber, int columnId, int width
 
 //////////////////////////////////////////////////////////////////////////////////////
 
-void TopiaryTable::sortOrderChanged(int newSortColumnId, bool isForwards) 
+void TopiaryTableList::sortOrderChanged(int newSortColumnId, bool isForwards) 
 {
 
 		if (newSortColumnId != 0)
@@ -148,7 +148,7 @@ void TopiaryTable::sortOrderChanged(int newSortColumnId, bool isForwards)
 
 //////////////////////////////////////////////////////////////////////////////////////
 
-Component* TopiaryTable::refreshComponentForCell(int rowNumber, int columnId, bool /*isRowSelected*/,
+Component* TopiaryTableList::refreshComponentForCell(int rowNumber, int columnId, bool /*isRowSelected*/,
 		Component* existingComponentToUpdate) 
 {
 		if (columnId != 1)
@@ -181,7 +181,7 @@ Component* TopiaryTable::refreshComponentForCell(int rowNumber, int columnId, bo
 
 //////////////////////////////////////////////////////////////////////////////////////
 
-int TopiaryTable::getColumnAutoSizeWidth(int columnId) 
+int TopiaryTableList::getColumnAutoSizeWidth(int columnId) 
 {
 		if (columnId == 9)
 			return 50;
@@ -204,7 +204,7 @@ int TopiaryTable::getColumnAutoSizeWidth(int columnId)
 
 //////////////////////////////////////////////////////////////////////////////////////
 
-int TopiaryTable::getSelectedRow()
+int TopiaryTableList::getSelectedRow()
 {
 	return tableComponent.getSelectedRow(0);
 	
@@ -212,7 +212,7 @@ int TopiaryTable::getSelectedRow()
 
 //////////////////////////////////////////////////////////////////////////////////////
 
-void TopiaryTable::selectRow(int i)
+void TopiaryTableList::selectRow(int i)
 {
 	tableComponent.selectRow(i);
 	
@@ -220,7 +220,7 @@ void TopiaryTable::selectRow(int i)
 
 //////////////////////////////////////////////////////////////////////////////////////
 
-int TopiaryTable::getSelection(const int rowNumber) const
+int TopiaryTableList::getSelection(const int rowNumber) const
 {  
 		return dataList->getChildElement(rowNumber)->getIntAttribute("Select");
 		
@@ -228,7 +228,7 @@ int TopiaryTable::getSelection(const int rowNumber) const
 
 //////////////////////////////////////////////////////////////////////////////////////
 
-void TopiaryTable::setSelection(const int rowNumber, const int newSelection)
+void TopiaryTableList::setSelection(const int rowNumber, const int newSelection)
 {
 		dataList->getChildElement(rowNumber)->setAttribute("Select", newSelection);
 		
@@ -236,7 +236,7 @@ void TopiaryTable::setSelection(const int rowNumber, const int newSelection)
 
 //////////////////////////////////////////////////////////////////////////////////////
 
-String TopiaryTable::getText(const int columnNumber, const int rowNumber) const
+String TopiaryTableList::getText(const int columnNumber, const int rowNumber) const
 {
 	return dataList->getChildElement(rowNumber)->getStringAttribute(getAttributeNameForColumnId(columnNumber));
 	
@@ -244,7 +244,7 @@ String TopiaryTable::getText(const int columnNumber, const int rowNumber) const
 
 //////////////////////////////////////////////////////////////////////////////////////
 
-String TopiaryTable::setText(const int columnNumber, const int rowNumber, const String& newText)
+String TopiaryTableList::setText(const int columnNumber, const int rowNumber, const String& newText)
 {
 	String validatedText;
 	// check input, type etc here!!!
@@ -309,7 +309,7 @@ String TopiaryTable::setText(const int columnNumber, const int rowNumber, const 
 
 //////////////////////////////////////////////////////////////////////////////////////
 
-void TopiaryTable::updateContent()
+void TopiaryTableList::updateContent()
 {
 	numRows = model->getNumItems();
 	model->fillDataList(dataList);	
@@ -319,14 +319,14 @@ void TopiaryTable::updateContent()
 
 //////////////////////////////////////////////////////////////////////////////////////
 
-void TopiaryTable::resized() 
+void TopiaryTableList::resized() 
 {
 	tableComponent.setBoundsInset(BorderSize<int>(8));
 } // resized
 
 //////////////////////////////////////////////////////////////////////////////////////
 
-void TopiaryTable::setPattern(int p)
+void TopiaryTableList::setPattern(int p)
 {
 	// set pattern index
 	pattern = p;

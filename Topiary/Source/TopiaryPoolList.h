@@ -16,23 +16,77 @@ You should have received a copy of the GNU General Public License
 along with Topiary. If not, see <https://www.gnu.org/licenses/>.
 */
 /////////////////////////////////////////////////////////////////////////////
-/* 
-Needs TOPIARYLISTMODEL defined; that will actually be a datalist model!!!
-Needs TOPIARYTABLE defined; that will be the name of this table model
-Some rules:
-** model sends broadcase msg that data has been updated
-** when model validates edits, no such update message is sent from here (caller of validateEdits returns the changes if needed)
-*/
-/////////////////////////////////////////////////////////////////////////////
 
 #pragma once
-#include "TopiaryListModel.h"
+#include "../../Topiary/Source/TopiaryListModel.h"
 
-class TopiaryTable : public Component, 
-					 public TableListBoxModel
+class TopiaryBeatsModel;
+
+class TopiaryPoolList : public TopiaryListModel
+{
+
+public:
+	TopiaryPoolList();
+	~TopiaryPoolList();
+	
+	void sortByID() override; 
+	void sortByNote();
+	void del(int n) override;
+	void add() override;
+	void addToModel(XmlElement *model);
+	void getFromModel(XmlElement *model);
+	void validateTableEdit(int p, XmlElement* child, String attribute) override;
+	void setBeatsModel(TopiaryBeatsModel* m);
+
+	static const int maxItems = 128;
+
+	struct data // MUST match what has been defined in the headerlist data!!!
+	{
+		int ID;
+		int note;
+		String label;
+		String description;
+		int pool;
+	};
+
+	data dataList[maxItems];
+
+	void fillDataList(XmlElement* dList) override;
+
+	void setIntByIndex(int row, int o, int newInt) override;
+
+	void setStringByIndex(int row, int i, String newString) override;
+
+	void renumber() override;
+
+	int isNoteInPool(int n);
+
+private:
+	TopiaryBeatsModel* beatsModel;
+
+	void swap(int from, int to)
+	{ 
+		intSwap(dataList[from].ID, dataList[to].ID);
+		intSwap(dataList[from].pool, dataList[to].pool);
+		intSwap(dataList[from].note, dataList[to].note);
+		stringSwap(dataList[from].label, dataList[to].label);
+		stringSwap(dataList[from].description, dataList[to].description);
+
+	} // swap
+
+}; // TopiaryPoolList
+
+#undef TOPIARYLISTMODEL
+#undef TOPIARYTABLE
+#define TOPIARYLISTMODEL TopiaryPoolList
+#define TOPIARYTABLE PoolListTable
+
+class TOPIARYTABLE : public Component,
+	public TableListBoxModel
 {
 public:
-	TopiaryTable();
+	TOPIARYTABLE();
+
 
 	int getNumRows() override;
 	void paintRowBackground(Graphics& g, int, int, int, bool) override;
@@ -46,28 +100,26 @@ public:
 	void setSelection(const int, const int);
 	String getText(const int, const int) const;
 	String setText(const int, const int, const String&);
-	void resized() override;	
+	void resized() override;
 	void updateContent();
 	bool isHeaderSet();
 	void setHeader();
-	void setModel(TopiaryListModel* model);
-	void setPattern(int p);
+	void setModel(TOPIARYLISTMODEL* model);
 
 private:
 	TableListBox tableComponent{ {}, this };
-	Font font{ 14.0f }; 
+	Font font{ 14.0f };
 	std::unique_ptr<XmlElement> tableData;
 	XmlElement* dataList;
-	
+
 	int numRows = 0;
 	bool headerSet = false;
-	TopiaryListModel* model;
-	int pattern = -1;
+	TOPIARYLISTMODEL* model;
 
 	class EditableTextCustomComponent : public Label
 	{
 	public:
-		EditableTextCustomComponent(TopiaryTable& td)
+		EditableTextCustomComponent(TOPIARYTABLE& td)
 			: owner(td)
 		{
 			setEditable(false, true, false);
@@ -99,9 +151,9 @@ private:
 			setText(owner.getText(columnId, row), dontSendNotification);
 		}
 
-		
+
 	private:
-		TopiaryTable& owner;
+		TOPIARYTABLE& owner;
 		int row, columnId;
 		Colour textColour;
 	}; // class EditableTextCustomComponent
@@ -111,7 +163,7 @@ private:
 	class SelectionColumnCustomComponent : public Component
 	{
 	public:
-		SelectionColumnCustomComponent(TopiaryTable& td)
+		SelectionColumnCustomComponent(TOPIARYTABLE& td)
 			: owner(td)
 		{
 			addAndMakeVisible(toggleButton);
@@ -132,7 +184,7 @@ private:
 		}
 
 	private:
-		TopiaryTable& owner;
+		TOPIARYTABLE& owner;
 		ToggleButton toggleButton;
 		int row, columnId;
 
@@ -176,5 +228,8 @@ private:
 	/////////////////////////////////////////////////////////////////////
 
 
-	JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(TopiaryTable)
+	JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(TOPIARYTABLE)
 };
+   //////////////////////////////////////////////////////////////////
+
+

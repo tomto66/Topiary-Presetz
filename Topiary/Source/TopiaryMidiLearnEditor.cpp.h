@@ -14,39 +14,39 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with Topiary. If not, see <https://www.gnu.org/licenses/>.
-
-/////////////////////////////////////////////////////////////////////////////
-
-This code has a generic editor component that can be included in every Topiary plugin.
-
-CAREFUL: needs symbols:
-- TOPIARYMODEL e.g. TOPIARYMODEL
-- TOPIARYEDITORCOMPONENT - e.g. TopiaryPresetsComponent
-
 */
 /////////////////////////////////////////////////////////////////////////////
 
-#pragma once
-#include "PluginProcessor.h"
-
 #ifdef TOPIARYMODEL
 
-class TopiaryAudioProcessorEditor  : public AudioProcessorEditor
+TopiaryMidiLearnEditor::TopiaryMidiLearnEditor()
 {
-public:
-    TopiaryAudioProcessorEditor (TopiaryAudioProcessor&);
-    ~TopiaryAudioProcessorEditor();
+}
 
-    void paint (Graphics&) override;
-    void resized() override;
 
-private:
-    
-    TopiaryAudioProcessor& processor;
-	TOPIARYMODEL* model;
-	TOPIARYEDITORCOMPONENT topiaryEditorComponent;
+TopiaryMidiLearnEditor::~TopiaryMidiLearnEditor()
+{
+}
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (TopiaryAudioProcessorEditor)
-};
+void TopiaryMidiLearnEditor::setModel(TOPIARYMODEL* m, int ID)  // ID is the unique ID of the editor, as known by the model (otherwise the model would never know what to learn MIDI for
+{
+	model = m;
+	Id = ID;
+}
+
+void TopiaryMidiLearnEditor::addPopupMenuItems(PopupMenu &menuToAddTo, const MouseEvent *mouseClickEvent)
+{
+	UNUSED(mouseClickEvent)
+	menuToAddTo.addItem(19660426, TRANS("MIDI Learn"), true);
+}
+
+void TopiaryMidiLearnEditor::performPopupMenuAction(int menuItemID) 
+{
+	// only possibility is 19660426
+	if (menuItemID == 19660426)
+	{
+		model->learnMidi(Id); // let the model know which MidiLearnEditor is asking to learn
+	}
+}
 
 #endif

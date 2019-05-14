@@ -28,11 +28,11 @@ Some rules:
 #pragma once
 #include "TopiaryListModel.h"
 
-class TopiaryTable : public Component, 
+class TopiaryTableList : public Component, 
 					 public TableListBoxModel
 {
 public:
-	TopiaryTable();
+	TopiaryTableList();
 
 	int getNumRows() override;
 	void paintRowBackground(Graphics& g, int, int, int, bool) override;
@@ -67,7 +67,7 @@ private:
 	class EditableTextCustomComponent : public Label
 	{
 	public:
-		EditableTextCustomComponent(TopiaryTable& td)
+		EditableTextCustomComponent(TopiaryTableList& td)
 			: owner(td)
 		{
 			setEditable(false, true, false);
@@ -101,7 +101,7 @@ private:
 
 		
 	private:
-		TopiaryTable& owner;
+		TopiaryTableList& owner;
 		int row, columnId;
 		Colour textColour;
 	}; // class EditableTextCustomComponent
@@ -111,7 +111,7 @@ private:
 	class SelectionColumnCustomComponent : public Component
 	{
 	public:
-		SelectionColumnCustomComponent(TopiaryTable& td)
+		SelectionColumnCustomComponent(TopiaryTableList& td)
 			: owner(td)
 		{
 			addAndMakeVisible(toggleButton);
@@ -132,7 +132,7 @@ private:
 		}
 
 	private:
-		TopiaryTable& owner;
+		TopiaryTableList& owner;
 		ToggleButton toggleButton;
 		int row, columnId;
 
@@ -176,5 +176,5 @@ private:
 	/////////////////////////////////////////////////////////////////////
 
 
-	JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(TopiaryTable)
+	JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(TopiaryTableList)
 };

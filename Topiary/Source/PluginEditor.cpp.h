@@ -26,27 +26,33 @@ CAREFUL: needs symbols:
 */
 /////////////////////////////////////////////////////////////////////////////
 
-#pragma once
 #include "PluginProcessor.h"
+#include "PluginEditor.h"
 
 #ifdef TOPIARYMODEL
 
-class TopiaryAudioProcessorEditor  : public AudioProcessorEditor
+
+TopiaryAudioProcessorEditor::TopiaryAudioProcessorEditor (TopiaryAudioProcessor& p)
+    : AudioProcessorEditor (&p), processor (p)
 {
-public:
-    TopiaryAudioProcessorEditor (TopiaryAudioProcessor&);
-    ~TopiaryAudioProcessorEditor();
+	setSize(TOPIARYEDITORCOMPONENT::width, TOPIARYEDITORCOMPONENT::heigth);
+	model = processor.getModel();
+	topiaryEditorComponent.setModel(model);
+	addAndMakeVisible(topiaryEditorComponent);
+}
 
-    void paint (Graphics&) override;
-    void resized() override;
+TopiaryAudioProcessorEditor::~TopiaryAudioProcessorEditor()
+{
+}
 
-private:
+void TopiaryAudioProcessorEditor::paint (Graphics& g)
+{
+	UNUSED(g)
+	topiaryEditorComponent.setBounds(getLocalBounds());
+}
+
+void TopiaryAudioProcessorEditor::resized()
+{
     
-    TopiaryAudioProcessor& processor;
-	TOPIARYMODEL* model;
-	TOPIARYEDITORCOMPONENT topiaryEditorComponent;
-
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (TopiaryAudioProcessorEditor)
-};
-
+}
 #endif

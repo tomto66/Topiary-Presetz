@@ -40,6 +40,7 @@ public:
 	void processUIChanges(bool override, int& n, int& d, int& bpm, int buttonEnabled);
 	void setModel(TOPIARYMODEL *m);
 	void checkModel();
+
 private:
 	TopiaryLookAndFeel topiaryLookAndFeel;
 	TOPIARYMODEL* model;
@@ -67,12 +68,23 @@ private:
 		// buttonEnabled; 0=Stop; 1=start; 2=rec 
 		int buttonEnabled = -1;
 		
-		if (stopButton.getToggleState())  buttonEnabled = 0;
+		if (stopButton.getToggleState())
+		{
+			buttonEnabled = 0;
+			// make sure that recbutton is off too
+			model->record(false);
+		}
 		if (startButton.getToggleState()) buttonEnabled = 1;
-		if (recButton.getToggleState())   buttonEnabled = 2;
+		//if (recButton.getToggleState())   buttonEnabled = 2;
 		int n = numeratorEditor.getText().getIntValue();
 		int d = denominatorEditor.getText().getIntValue();
 		int b = bpmEditor.getText().getIntValue();
+
+		if (startButton.getToggleState())
+			recButton.setEnabled(false);
+		else 
+			recButton.setEnabled(true);
+
 		if (buttonEnabled != -1)
 			processUIChanges(overrideButton.getToggleState(), n, d, b, buttonEnabled); // virtual function because it needs the model!
 		// no elses, screwed up when there was no button selected (yet) - can happen when toggling !!! spent hours figuring this out!
