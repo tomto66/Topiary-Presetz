@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<JUCERPROJECT id="so1YrE" name="Topiary Presetz" projectType="audioplug" jucerVersion="5.3.2"
-              version="0.9.91" companyName="Topiary" pluginManufacturer="Topiary"
+<JUCERPROJECT id="so1YrE" name="Topiary Presetz" projectType="audioplug" jucerVersion="5.4.3"
+              version="0.9.92" companyName="Topiary" pluginManufacturer="Topiary"
               pluginVSTCategory="kPlugCategGenerator" pluginManufacturerCode="Tpry"
               pluginCode="Tpry" pluginCharacteristicsValue="pluginIsMidiEffectPlugin,pluginIsSynth,pluginProducesMidiOut,pluginWantsMidiIn"
               splashScreenColour="Light" pluginFormats="buildStandalone,buildVST"
@@ -125,13 +125,32 @@
         <MODULEPATH id="juce_gui_extra" path="../JUCE/modules"/>
         <MODULEPATH id="juce_audio_basics" path="../JUCE/modules"/>
         <MODULEPATH id="juce_audio_devices" path="../JUCE/modules"/>
-        <MODULEPATH id="juce_audio_formats" path="../JUCE/modules"/>
         <MODULEPATH id="juce_audio_processors" path="../JUCE/modules"/>
         <MODULEPATH id="juce_audio_plugin_client" path="../JUCE/modules"/>
         <MODULEPATH id="juce_audio_utils" path="../JUCE/modules"/>
-        <MODULEPATH id="juce_opengl" path="../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_formats" path="../JUCE/modules"/>
       </MODULEPATHS>
     </VS2017>
+    <VS2019 targetFolder="Builds/VisualStudio2019">
+      <CONFIGURATIONS>
+        <CONFIGURATION isDebug="1" name="Debug" useRuntimeLibDLL="0"/>
+        <CONFIGURATION isDebug="0" name="Release" useRuntimeLibDLL="0"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_gui_extra"/>
+        <MODULEPATH id="juce_gui_basics"/>
+        <MODULEPATH id="juce_graphics"/>
+        <MODULEPATH id="juce_events"/>
+        <MODULEPATH id="juce_data_structures"/>
+        <MODULEPATH id="juce_core"/>
+        <MODULEPATH id="juce_audio_processors"/>
+        <MODULEPATH id="juce_audio_plugin_client"/>
+        <MODULEPATH id="juce_audio_devices"/>
+        <MODULEPATH id="juce_audio_basics"/>
+        <MODULEPATH id="juce_audio_utils" path="../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_formats" path="../JUCE/modules"/>
+      </MODULEPATHS>
+    </VS2019>
   </EXPORTFORMATS>
   <MODULES>
     <MODULE id="juce_audio_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
@@ -147,10 +166,10 @@
     <MODULE id="juce_graphics" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
     <MODULE id="juce_gui_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
     <MODULE id="juce_gui_extra" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
-    <MODULE id="juce_opengl" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
   </MODULES>
   <LIVE_SETTINGS>
-    <WINDOWS/>
+    <WINDOWS buildEnabled="1"/>
   </LIVE_SETTINGS>
-  <JUCEOPTIONS/>
+  <JUCEOPTIONS JUCE_USE_FLAC="0" JUCE_USE_OGGVORBIS="0" JUCE_USE_MP3AUDIOFORMAT="0"
+               JUCE_USE_LAME_AUDIO_FORMAT="0" JUCE_USE_WINDOWS_MEDIA_FORMAT="0"/>
 </JUCERPROJECT>
