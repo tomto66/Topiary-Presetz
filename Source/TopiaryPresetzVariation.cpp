@@ -19,4 +19,4 @@ along with Topiary Beats. If not, see <https://www.gnu.org/licenses/>.
 
 #pragma once
 #include "TopiaryPresetzVariation.h"
-#include "../../Topiary/Source/TopiaryVariation.cpp.h"
+#include "../../Topiary/Source/Model/TopiaryVariation.cpp.h"

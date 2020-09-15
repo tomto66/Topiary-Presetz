@@ -19,4 +19,4 @@ along with Topiary Presetz. If not, see <https://www.gnu.org/licenses/>.
 
 #pragma once
 #include "TopiaryPresetzUtilityComponent.h"
-#include "../../Topiary/Source/TopiaryUtilityComponent.cpp.h"
+#include "../../Topiary/Source/Components/TopiaryUtilityComponent.cpp.h"

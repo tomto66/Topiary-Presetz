@@ -19,6 +19,6 @@ along with Topiary Presetz. If not, see <https://www.gnu.org/licenses/>.
 
 #pragma once
 #include"TopiaryPresetzModel.h"
-#include "../../Topiary/Source/TopiaryUtilityComponent.h"
+#include "../../Topiary/Source/Components/TopiaryUtilityComponent.h"
 
 /////////////////////////////////////////////////////////////////////

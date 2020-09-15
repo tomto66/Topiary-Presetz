@@ -19,10 +19,10 @@ along with Topiary Presetz. If not, see <https://www.gnu.org/licenses/>.
 
 
 #pragma once
-#include "../../Topiary/Source/TopiaryModel.h"
+#include "../../Topiary/Source/Model/TopiaryModel.h"
 #include "TopiaryPresetzVariation.h"
 
-#include "../../Topiary/Source/TopiaryMidiLearnEditor.h"
+#include "../../Topiary/Source/Components/TopiaryMidiLearnEditor.h"
 
 class TopiaryPresetzModel : public TopiaryModel 
 {

@@ -23,5 +23,5 @@ along with Topiary Presetz. If not, see <https://www.gnu.org/licenses/>.
 #define TOPIARYMODEL TopiaryPresetzModel
 #define TOPIARYEDITORCOMPONENT TopiaryPresetzComponent
 
-#include "../../Topiary/Source/PluginProcessor.h"
+#include "../../Topiary/Source/Plugin/PluginProcessor.h"
 

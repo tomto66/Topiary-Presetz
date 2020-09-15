@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 /*
-This file is part of Topiary Presetz, Copyright Tom Tollenaere 2018-2019.
+This file is part of Topiary Presetz, Copyright Tom Tollenaere 2018-2020.
 
 Topiary Presetz is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -19,9 +19,10 @@ along with Topiary Presetz. If not, see <https://www.gnu.org/licenses/>.
 
 #pragma once
 #include "TopiaryPresetzModel.h"
+#include "Build.h"
 
 // following has std model code that can be included (cannot be in TopiaryModel because of variable definitions)
-#include"../../Topiary/Source/TopiaryModel.cpp.h"
+#include"../../Topiary/Source/Model/TopiaryModel.cpp.h"
 
 void TopiaryPresetzModel::saveStateToMemoryBlock(MemoryBlock& destData)
 {
@@ -34,8 +35,7 @@ void TopiaryPresetzModel::saveStateToMemoryBlock(MemoryBlock& destData)
 
 void TopiaryPresetzModel::restoreStateFromMemoryBlock(const void* data, int sizeInBytes)
 {
-	//return; // XXXXXXXXX
-	model.reset(AudioProcessor::getXmlFromBinary(data, sizeInBytes));
+	model = AudioProcessor::getXmlFromBinary(data, sizeInBytes);
 	restoreParametersToModel();
 
 } // restoreStateFromMemoryBlock
@@ -47,56 +47,55 @@ void TopiaryPresetzModel::addParametersToModel()
 	auto parameters = new XmlElement("Parameters");
 	model->addChildElement(parameters);
 
-	addStringToModel(parameters, name, "name");
-	addIntToModel(parameters, BPM, "BPM");
-	addIntToModel(parameters, numerator, "numerator");
-	addIntToModel(parameters, denominator, "denominator");
-	addIntToModel(parameters, variationSelected, "variationSelected");
-	addIntToModel(parameters, switchVariation, "switchVariation");
-	addIntToModel(parameters, runStopQ, "runStopQ");
-	addIntToModel(parameters, variationStartQ, "variationStartQ");
-	addBoolToModel(parameters, WFFN, "WFFN");
-	addBoolToModel(parameters, overrideHostTransport, "overrideHostTransport");
-	addBoolToModel(parameters, notePassThrough, "notePassThrough");
+	addToModel(parameters, name, "name");
+	addToModel(parameters, BPM, "BPM");
+	addToModel(parameters, numerator, "numerator");
+	addToModel(parameters, denominator, "denominator");
+	addToModel(parameters, variationSelected, "variationSelected");
+	addToModel(parameters, switchVariation, "switchVariation");
+	addToModel(parameters, runStopQ, "runStopQ");
+	addToModel(parameters, variationStartQ, "variationStartQ");
+	addToModel(parameters, WFFN, "WFFN");
+	addToModel(parameters, overrideHostTransport, "overrideHostTransport");
+	addToModel(parameters, notePassThrough, "notePassThrough");
 
-	addBoolToModel(parameters, logMidiIn, "logMidiIn");
-	addBoolToModel(parameters, logMidiOut, "logMidiOut");
-	addBoolToModel(parameters, logDebug, "logDebug");
-	addBoolToModel(parameters, logTransport, "logTransport");
-	addBoolToModel(parameters, logVariations, "logVariations");
-	addBoolToModel(parameters, logInfo, "logInfo");
-	addStringToModel(parameters, filePath, "filePath");
+	addToModel(parameters, logMidiIn, "logMidiIn");
+	addToModel(parameters, logMidiOut, "logMidiOut");
+	addToModel(parameters, logDebug, "logDebug");
+	addToModel(parameters, logTransport, "logTransport");
+	addToModel(parameters, logVariations, "logVariations");
+	addToModel(parameters, logInfo, "logInfo");
+	addToModel(parameters, filePath, "filePath");
 	
-	addIntToModel(parameters, variationSwitchChannel, "variationSwitchChannel");
-	addBoolToModel(parameters, ccVariationSwitching, "ccVariationSwitching");
+	addToModel(parameters, variationSwitchChannel, "variationSwitchChannel");
+	addToModel(parameters, ccVariationSwitching, "ccVariationSwitching");
 
 	for (int i = 0; i < 8; i++) 
 	{
-		// addIntToModel(parameters, variation[i].lenInTicks, "lenInTicks", i); not needed; len is always measure!
-		addStringToModel(parameters, variation[i].name, "variationName", i);
-		addBoolToModel(parameters, variation[i].enabled, "variationEnabled", i);
-		addIntToModel(parameters, variation[i].timing, "variationTiming", i);
+		addToModel(parameters, variation[i].name, "variationName", i);
+		addToModel(parameters, variation[i].enabled, "variationEnabled", i);
+		addToModel(parameters, variation[i].timing, "variationTiming", i);
 		for (int j = 0; j < PRESETELEMENTS; j++)
 		{
-			addIntToModel(parameters, variation[i].presetValue[j], "presetValue", i,j);
+			addToModel(parameters, variation[i].presetValue[j], "presetValue", i,j);
 		}
 
 		// automation
-		addIntToModel(parameters, variationSwitch[i], "variationSwitch", i);
+		addToModel(parameters, variationSwitch[i], "variationSwitch", i);
 	}
 
 	for (int i = 0; i < PRESETELEMENTS; i++)
 	{
 		// preset definitions
-		addStringToModel(parameters, presetDefinition[i].name, "presetName", i);
-		addIntToModel(parameters, presetDefinition[i].inCC, "presetInCC", i);
-		addIntToModel(parameters, presetDefinition[i].inChannel, "presetInChannel", i);
-		addIntToModel(parameters, presetDefinition[i].fromValue, "presetFrom", i);
-		addIntToModel(parameters, presetDefinition[i].outChannel, "presetOutChannel", i);
-		addIntToModel(parameters, presetDefinition[i].outCC, "presetOutCC", i);
-		addIntToModel(parameters, presetDefinition[i].fromValue, "presetFrom", i);
-		addIntToModel(parameters, presetDefinition[i].toValue, "presetTo", i);
-		addBoolToModel(parameters, presetDefinition[i].enabled, "presetEnabled", i);
+		addToModel(parameters, presetDefinition[i].name, "presetName", i);
+		addToModel(parameters, presetDefinition[i].inCC, "presetInCC", i);
+		addToModel(parameters, presetDefinition[i].inChannel, "presetInChannel", i);
+		addToModel(parameters, presetDefinition[i].fromValue, "presetFrom", i);
+		addToModel(parameters, presetDefinition[i].outChannel, "presetOutChannel", i);
+		addToModel(parameters, presetDefinition[i].outCC, "presetOutCC", i);
+		addToModel(parameters, presetDefinition[i].fromValue, "presetFrom", i);
+		addToModel(parameters, presetDefinition[i].toValue, "presetTo", i);
+		addToModel(parameters, presetDefinition[i].enabled, "presetEnabled", i);
 	}
 } // addParametersToModel
 
@@ -108,7 +107,10 @@ void TopiaryPresetzModel::restoreParametersToModel()
 	// model now has a child "Parameters"; set all non-XML parameters to their new values
 
 	auto child = model->getFirstChildElement();
-	
+	bool rememberOverride = true; // we do not want to set that right away!
+	overrideHostTransport = true;
+	setRunState(Topiary::Stopped);
+
 	while (child != nullptr)
 	{
 		String tagName = child->getTagName();
@@ -122,7 +124,7 @@ void TopiaryPresetzModel::restoreParametersToModel()
 				if (parameterName.compare("name") == 0)	name = parameter->getStringAttribute("Value");
 				if (parameterName.compare("BPM") == 0) BPM = parameter->getIntAttribute("Value");
 				if (parameterName.compare("numerator") == 0) numerator = parameter->getIntAttribute("Value");
-				if (parameterName.compare("overrideHostTransport") == 0) overrideHostTransport = (bool)parameter->getIntAttribute("Value");
+				if (parameterName.compare("overrideHostTransport") == 0) rememberOverride = (bool)parameter->getIntAttribute("Value");
 				if (parameterName.compare("denominator") == 0) denominator = parameter->getIntAttribute("Value");
 				if (parameterName.compare("variationSelected") == 0)
 				{
@@ -193,8 +195,9 @@ void TopiaryPresetzModel::restoreParametersToModel()
 	broadcaster.sendActionMessage(MsgVariationAutomation);	// inform editor of variation automation settings;
 
 	setRunState(Topiary::Stopped);
+	overrideHostTransport = rememberOverride;
 
-	// make sure that any variation-specific stuff is sent out if needed (needed for presetz e.g.
+	// make sure that any variation-specific stuff is sent out if needed (needed for presetz e.g.)
 	outputVariationEvents(); 
 	
 
@@ -210,7 +213,13 @@ TopiaryPresetzModel::TopiaryPresetzModel()
 	switchVariation = Topiary::VariationSwitch::SwitchFromStart;
 
 	logString = "";
-	Log(String("Topiary Presetz V ") + String(xstr(JucePlugin_Version)) + String(" (c) Tom Tollenaere 2018-2019."), Topiary::LogType::License);
+	//Log(String("Topiary Presetz V ") + String(xstr(JucePlugin_Version)) + String(" (c) Tom Tollenaere 2018-2019."), Topiary::LogType::License);
+	Log(String("Topiary Presetz V ") + String(xstr(JucePlugin_Version)) + String(" - ") + String(BUILD_DATE)
+#ifdef _DEBUG
+		+ String("D")
+#endif
+		+ String("."), Topiary::LogType::License);
+	Log(String("(C) Tom Tollenaere 2018-2020."), Topiary::LogType::License);
 	Log(String(""), Topiary::LogType::License);
 	Log(String("Topiary Presetz is free software : you can redistribute it and/or modify"), Topiary::LogType::License);
 	Log(String("it under the terms of the GNU General Public License as published by"), Topiary::LogType::License);
@@ -225,7 +234,7 @@ TopiaryPresetzModel::TopiaryPresetzModel()
 	Log(String("VST PlugIn Technology by Steinberg Media Technologies."), Topiary::LogType::License);
 	Log(String(""), Topiary::LogType::License);
 
-	overrideHostTransport = false;
+	overrideHostTransport = true;
 	runState = Topiary::Stopped;
 	BPM = 120;
 	numerator = 4; denominator = 4;
@@ -419,7 +428,7 @@ void TopiaryPresetzModel::getVariationDefinition(int v, bool &enabled, String &v
 void TopiaryPresetzModel::setVariationDefinition(int v, bool enabled, String vname,  int presetVal[PRESETELEMENTS], int timing)
 {
 	bool saved = false;
-
+	
 	if (variation[v].timing != timing)
 	{
 		variation[v].timing = timing;
@@ -431,6 +440,24 @@ void TopiaryPresetzModel::setVariationDefinition(int v, bool enabled, String vna
 		variation[v].enabled = enabled;
 		saved = true;
 	};
+
+	if (!enabled)
+	{
+		// make sure to enable hostOverride if there are no enabled variations
+		// otherwise host might try to run the plugin when these is nothing to run - it might hang
+		bool ok = false;
+		for (int i = 0; i < 8; i++)
+		{
+			if (variation[i].enabled)
+				ok = true;
+		}
+
+		if (!ok && !overrideHostTransport)
+		{
+			setOverrideHostTransport(true);
+			Log("Host overridden because no variation enabled; don't forget to re-enable if needed.", Topiary::Warning);
+		}
+	}
 
 	if (vname.compare(variation[v].name) != 0)
 	{
@@ -773,4 +800,4 @@ void TopiaryPresetzModel::getVariationNames(String vNames[8])
 
 
 /////////////////////////////////////////////////////////////////////////////
-#include "../../Topiary/Source/TopiaryMidiLearnEditor.cpp.h"
+#include "../../Topiary/Source/Components/TopiaryMidiLearnEditor.cpp.h"

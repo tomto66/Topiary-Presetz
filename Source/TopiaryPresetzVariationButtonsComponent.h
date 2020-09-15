@@ -21,7 +21,7 @@ along with Topiary Presetz. If not, see <https://www.gnu.org/licenses/>.
 #include"TopiaryPresetzModel.h"
 #define TOPIARYMODEL TopiaryPresetzModel
 #define TOPIARYVARIATIONBUTTONSCOMPONENT TopiaryPresetzVariationButtonsComponent
-#include "../../Topiary/Source/TopiaryVariationButtonsComponent.h"
+#include "../../Topiary/Source/Components/TopiaryVariationButtonsComponent.h"
 
 /*
 class TopiaryPresetzVariationButtonsComponent : public TopiaryVariationButtonsComponent

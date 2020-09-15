@@ -26,5 +26,5 @@ along with Topiary Presetz. If not, see <https://www.gnu.org/licenses/>.
 #endif
 
 #define TOPIARYEDITORCOMPONENT TopiaryPresetzComponent
-#include "../../Topiary/Source/PluginEditor.h"
+#include "../../Topiary/Source/Plugin/PluginEditor.h"
 

@@ -19,5 +19,5 @@ along with Topiary Presetz. If not, see <https://www.gnu.org/licenses/>.
 
 #pragma once
 #include "TopiaryPresetzVariationButtonsComponent.h"
-#include "../../Topiary/Source/TopiaryVariationButtonsComponent.cpp.h"
+#include "../../Topiary/Source/Components/TopiaryVariationButtonsComponent.cpp.h"
 

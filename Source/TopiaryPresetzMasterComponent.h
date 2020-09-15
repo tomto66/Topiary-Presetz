@@ -19,7 +19,7 @@ along with Topiary Presetz. If not, see <https://www.gnu.org/licenses/>.
 
 
 #pragma once
-#include"../../Topiary/Source/TopiaryTable.h"  
+#include"../../Topiary/Source/Components/TopiaryTable.h"  
 #include "TopiaryPresetzVariationChildren.h"
 
 class TopiaryPresetzMasterComponent;
