@@ -1,6 +1,6 @@
 Only Win64 for now!
 
-Download and put the dll in your VST2 directory.  Possbily you'll need your host  to re-scan that directory.
+Download and put the dll in your VST2 directory.  Possibily you'll need your host  to re-scan that directory.
 Tested in Cantabile 3, Cubase LE & Reaper.
 
 
