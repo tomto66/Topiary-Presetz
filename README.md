@@ -18,7 +18,7 @@ Careful: binary data is provided in the Topiary/JuceLibraryCode folder - make su
 
 ## Installing binaries
 
-* Plugin is found under Topiary Presetz / binaries.  Feel free to rename it.
+* Plugin is found under Topiary Presetz / Binaries.  Feel free to rename it.
 * Install in your VST2 plugin folder.  You host may need to rescan that folder.
 
 ## Issues
