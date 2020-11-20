@@ -9,7 +9,7 @@ Topiary Presetz is a plugin that allows the user to define 8 sets of "mix settin
 
 In order to compile, you will need JUCE and the VST2 headers. Steinberg no longer provides these but you can find them in the Juce 5.3 repositories.
 
-Careful: binary data is provided in the Topiary/JuceLibraryCode folder - make sure your projucer doesn't delete that!
+Careful: binary data is provided in the Topiary/JuceLibraryCode folder - make sure your projucer doesn't delete that! (it contains the Topiary logo artwork)
 
 ## Compatibility / Testing
 
