@@ -37,6 +37,7 @@ public:
 	bool switchingVariations() override;
 	void generateMidi(MidiBuffer* midiBuffer, MidiBuffer* recBuffer) override;
 	void initializeVariationsForRunning() override;
+	void setRunState(int n) override;
 	void addParametersToModel() override;
 	void restoreParametersToModel() override;
 	void generateTransition();
@@ -56,7 +57,7 @@ public:
 		String name;
 		int lenInTicks;  // unused for now
 		int presetValue[PRESETELEMENTS];
-		int currentPatternChild;
+		//int currentPatternChild;
 		int type = Topiary::VariationTypeEnd;
 		bool ended;
 		int timing; // duration of the transition
@@ -157,6 +158,16 @@ protected:
 			timestamp = (float) (length - 1);
 			// last step is to target value
 			generateTransitionCCMsgs();
+
+			/*
+			Logger::outputDebugString("------------------------");
+			for (int j = 0; j < variation[v].pattern.numItems; j++)
+			{
+				Logger::outputDebugString("<" + String(j) + "> <ID" + String(variation[v].pattern.dataList[j].ID)+"> CC value: " + String(variation[v].pattern.dataList[j].value) + " timestamp " + String(variation[v].pattern.dataList[j].timestamp) + " midiType " + String(variation[v].pattern.dataList[j].midiType));
+			}
+			Logger::outputDebugString("------------------------");
+			*/
+
 		}
 	} // generateTransition
 

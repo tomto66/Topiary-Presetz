@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 /*
-This file is part of Topiary Presetz, Copyright Tom Tollenaere 2018-2020.
+This file is part of Topiary Presetz, Copyright Tom Tollenaere 2018-2021.
 
 Topiary Presetz is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -67,7 +67,7 @@ void TopiaryPresetzModel::addParametersToModel()
 	addToModel(parameters, logInfo, "logInfo");
 	addToModel(parameters, filePath, "filePath");
 	
-	addToModel(parameters, variationSwitchChannel, "variationSwitchChannel");
+	addToModel(parameters, midiChannelListening, "variationSwitchChannel");
 	addToModel(parameters, ccVariationSwitching, "ccVariationSwitching");
 
 	for (int i = 0; i < 8; i++) 
@@ -170,7 +170,7 @@ void TopiaryPresetzModel::restoreParametersToModel()
 				// automation
 				if (parameterName.compare("variationSwitch") == 0)  variationSwitch[parameter->getIntAttribute("Index")] = parameter->getIntAttribute("Value");
 				if (parameterName.compare("ccVariationSwitching") == 0)  ccVariationSwitching = (bool)parameter->getIntAttribute("Value");
-				if (parameterName.compare("variationSwitchChannel") == 0)  variationSwitchChannel = parameter->getIntAttribute("Value");
+				if (parameterName.compare("variationSwitchChannel") == 0)  midiChannelListening = parameter->getIntAttribute("Value");
 
 				parameter = parameter->getNextElement();
 			}
@@ -213,13 +213,13 @@ TopiaryPresetzModel::TopiaryPresetzModel()
 	switchVariation = Topiary::VariationSwitch::SwitchFromStart;
 
 	logString = "";
-	//Log(String("Topiary Presetz V ") + String(xstr(JucePlugin_Version)) + String(" (c) Tom Tollenaere 2018-2019."), Topiary::LogType::License);
+	
 	Log(String("Topiary Presetz V ") + String(xstr(JucePlugin_Version)) + String(" - ") + String(BUILD_DATE)
 #ifdef _DEBUG
 		+ String("D")
 #endif
 		+ String("."), Topiary::LogType::License);
-	Log(String("(C) Tom Tollenaere 2018-2020."), Topiary::LogType::License);
+	Log(String("(C) Tom Tollenaere 2018-2021."), Topiary::LogType::License);
 	Log(String(""), Topiary::LogType::License);
 	Log(String("Topiary Presetz is free software : you can redistribute it and/or modify"), Topiary::LogType::License);
 	Log(String("it under the terms of the GNU General Public License as published by"), Topiary::LogType::License);
@@ -267,7 +267,7 @@ TopiaryPresetzModel::TopiaryPresetzModel()
 		variation[v].type = Topiary::VariationTypeEnd;  // indicates this pattern  only runs once; needed in generateMidi (otherwise it will loop)
 		variation[v].timing = Topiary::Quantization::Immediate;
 		variationSwitch[v] = ccStart;
-		variation[v].currentPatternChild = 0;
+		//variation[v].currentPatternChild = 0;
 		
 		ccStart++;
 
@@ -276,7 +276,7 @@ TopiaryPresetzModel::TopiaryPresetzModel()
 			variation[v].presetValue[i] = 63;
 		}	
 
-		variation[v].pattern.patLenInTicks = Topiary::TicksPerQuarter * 8; //just to be safe :)
+		variation[v].pattern.patLenInTicks = Topiary::TicksPerQuarter * 4; //just to be safe :) - every time the meter changes this needs to change too!!!
 		variation[v].pattern.numItems = 0;
 	}
 
@@ -490,7 +490,7 @@ void TopiaryPresetzModel::initializeVariationsForRunning()
 	for (int v = 0; v < 8; v++)
 	{
 		variation[v].ended = true;
-		variation[v].currentPatternChild = 0;
+		//variation[v].currentPatternChild = 0;
 	}
 } // initializeVariationsForRunning
 
@@ -528,7 +528,8 @@ void TopiaryPresetzModel::generateTransition()
 	
 	for (int p = 0; p < PRESETELEMENTS; p++)
 	{
-		generateTransition(p, variationSelected, length);
+		if (presetDefinition[p].enabled)
+			generateTransition(p, variationSelected, length);
 	}
 
 	// sort the children under transition
@@ -545,7 +546,7 @@ void TopiaryPresetzModel::outputVariationEvents()
 	// called when a variation is clicked on outside of running - pre-dest the preset values in modelEventBuffer so processor will pick it up
 
 	jassert(runState != Topiary::Running);
-	// the caller is setVariation whic has the model lock, so this is safe
+	// the caller is setVariation which has the model lock, so this is safe
 	
 	MidiMessage msg;
 	modelEventBuffer.clear();
@@ -579,7 +580,7 @@ void TopiaryPresetzModel::copyVariation(int from, int to)
 	variation[to].enabled = variation[from].enabled;
 	variation[to].name = variation[from].name + String(" copy");
 	variation[to].lenInTicks = variation[from].lenInTicks;
-	variation[to].currentPatternChild = 0;
+	//variation[to].currentPatternChild = 0;
 
 	variation[to].timing = variation[from].timing;
 	for (int i = 0; i < PRESETELEMENTS; i++)
@@ -604,7 +605,7 @@ void TopiaryPresetzModel::swapVariation(int from, int to)
 	bool rEnabled;
 	String rName;
 	int rLenInTicks;
-	int rCurrentPatternChild;
+	//int rCurrentPatternChild;
 	int rTiming;
 	int rPresetValue[PRESETELEMENTS];
 
@@ -613,7 +614,7 @@ void TopiaryPresetzModel::swapVariation(int from, int to)
 	rEnabled = variation[from].enabled;
 	rName = variation[from].name;
 	rLenInTicks = variation[from].lenInTicks;
-	rCurrentPatternChild = variation[from].currentPatternChild;
+	//rCurrentPatternChild = variation[from].currentPatternChild;
 
 	rTiming = variation[from].timing;
 	for (int i = 0; i < PRESETELEMENTS; i++)
@@ -624,7 +625,7 @@ void TopiaryPresetzModel::swapVariation(int from, int to)
 	variation[from].enabled = variation[to].enabled;
 	variation[from].name = variation[to].name;
 	variation[from].lenInTicks = variation[to].lenInTicks;
-	variation[from].currentPatternChild = variation[to].currentPatternChild;
+	//variation[from].currentPatternChild = variation[to].currentPatternChild;
 
 	variation[from].timing = variation[to].timing;
 	for (int i = 0; i < PRESETELEMENTS; i++)
@@ -635,7 +636,7 @@ void TopiaryPresetzModel::swapVariation(int from, int to)
 	variation[to].enabled = rEnabled;
 	variation[to].name = rName;
 	variation[to].lenInTicks = rLenInTicks;
-	variation[to].currentPatternChild = rCurrentPatternChild;
+	//variation[to].currentPatternChild = rCurrentPatternChild;
 
 	variation[to].timing = rTiming;
 	for (int i = 0; i < PRESETELEMENTS; i++)

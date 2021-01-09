@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<JUCERPROJECT id="so1YrE" name="Topiary Presetz" projectType="audioplug" version="1.0.1"
+<JUCERPROJECT id="so1YrE" name="Topiary Presetz" projectType="audioplug" version="1.0.2"
               companyName="Topiary" pluginManufacturer="Topiary" pluginVSTCategory="kPlugCategGenerator"
               pluginManufacturerCode="Tpry" pluginCode="Tpry" pluginCharacteristicsValue="pluginIsMidiEffectPlugin,pluginIsSynth,pluginProducesMidiOut,pluginWantsMidiIn"
               splashScreenColour="Light" pluginFormats="buildStandalone,buildVST"
               pluginVST3Category="Fx,Generator" jucerFormatVersion="1">
   <MAINGROUP id="MiVGXn" name="Topiary Presetz">
+    <FILE id="SRnwlH" name="TopiaryKeytracker.cpp" compile="1" resource="0"
+          file="../Topiary/Source/Model/TopiaryKeytracker.cpp"/>
+    <FILE id="GElFcg" name="TopiaryKeytracker.h" compile="0" resource="0"
+          file="../Topiary/Source/Model/TopiaryKeytracker.h"/>
     <FILE id="iwhpl8" name="TopiaryLogComponent.cpp.h" compile="0" resource="0"
           file="../Topiary/Source/Components/TopiaryLogComponent.cpp.h"/>
     <FILE id="dKfAjl" name="TopiaryLogComponent.h" compile="0" resource="0"
@@ -111,8 +115,8 @@
   <EXPORTFORMATS>
     <VS2019 targetFolder="Builds/VisualStudio2019">
       <CONFIGURATIONS>
-        <CONFIGURATION isDebug="1" name="Debug" useRuntimeLibDLL="0"/>
-        <CONFIGURATION isDebug="0" name="Release" useRuntimeLibDLL="0"/>
+        <CONFIGURATION isDebug="1" name="Debug" useRuntimeLibDLL="0" prebuildCommand="&quot;c:\development\Topiary Presetz\source\build.bat&quot; "/>
+        <CONFIGURATION isDebug="0" name="Release" useRuntimeLibDLL="0" prebuildCommand="&quot;c:\development\Topiary Presetz\source\build.bat&quot; "/>
       </CONFIGURATIONS>
       <MODULEPATHS>
         <MODULEPATH id="juce_gui_extra"/>
