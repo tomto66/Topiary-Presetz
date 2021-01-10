@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 /*
-This file is part of Topiary Presetz, Copyright Tom Tollenaere 2018-2019.
+This file is part of Topiary Presetz, Copyright Tom Tollenaere 2018-2021.
 
 Topiary Presetz is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -445,3 +445,11 @@ void TopiaryPresetzMasterComponent::fillVariationCombo()
 	variationDefinitionComponent.variationCombo.setSelectedId(variation + 1, dontSendNotification);
 
 } // fillVariationCombo
+
+/////////////////////////////////////////////////////////////////////////////
+
+void TopiaryPresetzMasterComponent::setAllTransitionTimes(int transitionTime)
+{
+	presetzModel->setAllTransitionTimes(transitionTime);
+
+} // setAllTransitionTimes

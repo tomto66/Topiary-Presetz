@@ -98,6 +98,7 @@ void TopiaryPresetzTabbedComponent::actionListenerCallback(const String &message
 			masterComponent.setEnabled(true);
 			utilityComponent.setEnabled(true);
 		}
+		
 	}
 } // actionListenerCallback
 

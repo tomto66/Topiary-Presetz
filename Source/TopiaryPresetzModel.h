@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 /*
-This file is part of Topiary Presetz, Copyright Tom Tollenaere 2018-2019.
+This file is part of Topiary Presetz, Copyright Tom Tollenaere 2018-2021.
 
 Topiary Presetz is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -94,10 +94,15 @@ public:
 	void processCC(MidiMessage& msg) override;
 
 	bool midiLearn(MidiMessage m); // called by processor
+	void setAllTransitionTimes(int transitionTime);
+
+	bool fakeRun = false;  // used to flag that we are doing a transition even if the plugin is not running
 
 protected:
 	Variation variation[8];		
-	
+	int rememberVariationStartQ = 0;  // to make plugin do transitions even if not running
+	int rememberFakeRunState = -1;    // to make plugin do transitions even if not running
+
 	PresetElementDefinition presetDefinition[PRESETELEMENTS];		// the definitions
 
 	int presetRTValue[PRESETELEMENTS];								// the actual realtime values of where we are in real time (not stored in the presets nor the variations0

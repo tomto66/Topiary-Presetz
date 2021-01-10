@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 /*
-This file is part of Topiary Presetz, Copyright Tom Tollenaere 2018-2019.
+This file is part of Topiary Presetz, Copyright Tom Tollenaere 2018-2021.
 
 Topiary Presetz is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -69,7 +69,14 @@ along with Topiary Presetz. If not, see <https://www.gnu.org/licenses/>.
 		{
 			parent->setVariationDefinition();
 		};
-		
+
+		addAndMakeVisible(allTimingButton);
+		allTimingButton.setButtonText("ALL");
+		allTimingButton.onClick = [this]
+		{
+			parent->setAllTransitionTimes(timingCombo.getSelectedId());
+		};
+
 	} // VariationDefinitionComponent
 
 	///////////////////////////////////////////////////////////////////////////////////
@@ -134,10 +141,15 @@ along with Topiary Presetz. If not, see <https://www.gnu.org/licenses/>.
 		variationCombo.setBounds(leftBounds);
 		variationCombo.setSize(leftBounds.getWidth(), leftBounds.getHeight());
 		
-		topBounds.removeFromLeft(120);
-		timingCombo.setBounds(topBounds);
-		timingCombo.setSize(topBounds.getWidth(), topBounds.getHeight());
+		topBounds.removeFromLeft(110);
+		leftBounds = topBounds.removeFromLeft(80);
+		timingCombo.setBounds(leftBounds);
+		timingCombo.setSize(leftBounds.getWidth(), leftBounds.getHeight());
 		
+		topBounds.removeFromLeft(10);
+		allTimingButton.setBounds(topBounds);
+		allTimingButton.setSize(topBounds.getWidth(), topBounds.getHeight());
+
 		g.drawText("Transition time", 255, 53, 200, labelOffset, juce::Justification::centredLeft);
 	} // paint
 

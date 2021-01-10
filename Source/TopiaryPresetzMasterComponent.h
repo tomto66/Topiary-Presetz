@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 /*
-This file is part of Topiary Presetz, Copyright Tom Tollenaere 2018-2019.
+This file is part of Topiary Presetz, Copyright Tom Tollenaere 2018-2021.
 
 Topiary Presetz is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -41,6 +41,7 @@ public:
 	void setVariationDefinition();
 	void setRTValue(int p, int v);   // does NOT output in real time !!!
 	void fillVariationCombo();
+	void setAllTransitionTimes(int transitionTime);
 
 private:
 	TopiaryPresetzModel* presetzModel;
@@ -69,9 +70,7 @@ private:
 
 	TopiaryButton WFFNButton;
 	TopiaryButton notePassThroughButton;
-	//ComboBox switchVariationCombo;
 	ComboBox quantizeVariationStartCombo;
-	//ComboBox quantizeRunStopCombo;
 	TextButton saveButton;
 	TextButton loadButton;
 	TextEditor nameEditor;
@@ -86,10 +85,7 @@ private:
 		presetzModel->setWFFN(WFFNButton.getToggleState());
 		presetzModel->setNotePassThrough(notePassThroughButton.getToggleState());
 		presetzModel->setVariationStartQ(quantizeVariationStartCombo.getSelectedId());
-		
-		//presetzModel->setRunStopQ(quantizeRunStopCombo.getSelectedId());
 		presetzModel->setName(nameEditor.getText());
-		//presetzModel->setSwitchVariation(switchVariationCombo.getSelectedId());
 
 	} // setSettings
 
@@ -103,9 +99,6 @@ private:
 		WFFNButton.setToggleState(presetzModel->getWFFN(), dontSendNotification);
 		notePassThroughButton.setToggleState(presetzModel->getNotePassThrough(), dontSendNotification);
 		quantizeVariationStartCombo.setSelectedId(presetzModel->getVariationStartQ(), dontSendNotification);
-		//quantizeRunStartCombo.setSelectedId(presetzModel->getRunStartQ(), dontSendNotification);
-		//quantizeRunStopCombo.setSelectedId(presetzModel->getRunStopQ(), dontSendNotification);
-		//switchVariationCombo.setSelectedId(presetzModel->getSwitchVariation(), dontSendNotification);
 		auto name = presetzModel->getName();
 		nameEditor.setText(name, dontSendNotification);
 		

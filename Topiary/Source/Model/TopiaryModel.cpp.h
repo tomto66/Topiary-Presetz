@@ -152,14 +152,12 @@ void TOPIARYMODEL::setRunState(int n)
 			}
 
 #endif
-
+			broadcaster.sendActionMessage(MsgTransport);
 			break;
 		default:
 			break;
 
 		}
-
-		broadcaster.sendActionMessage(MsgTransport);
 
 	}
 
@@ -171,12 +169,18 @@ void TOPIARYMODEL::setRunState(int n)
 	}
 	else
 	{
+#ifdef PRESETZ
+		if (!fakeRun)
+#endif
 		setVariation(variationSelected);	// so that if the button was orange, it becomes blue again
 	}
 
 	// now the first waiting variation might stil be orange; fix that below
 	if (remember == Topiary::Armed)
-		setVariation(variationSelected);
+#ifdef PRESETZ
+		if (!fakeRun)
+#endif
+			setVariation(variationSelected);
 
 } // setRunState
 
@@ -291,11 +295,22 @@ void TOPIARYMODEL::setVariation(int n)
 		Log("Cannot switch to disabled variation.", Topiary::LogType::Warning);
 		return;
 	}
-	if ((n != variationSelected) || (runState == Topiary::Stopped))
-		// the || runState || is needed because we may need to re-set a waiting variation to non-waiting; in that case we want the update to happen otherwise the buttons stays orange
-	{
-		const GenericScopedLock<CriticalSection> myScopedLock(lockModel);
 
+#ifdef PRESETZ
+	//	outputVariationEvents(); // output the variation preset values!
+	if ((n != variationSelected)  && (runState != Topiary::Running) && variation[variationSelected].enabled && !fakeRun)
+	{
+		fakeRun = true; // will be reset when the transition ends in generateMidi
+		rememberFakeRunState = runState;
+		runState = Topiary::Armed;
+		rememberVariationStartQ = variationStartQ;
+		variationStartQ = Topiary::Quantization::Immediate;
+	}
+#endif
+
+	if ((n != variationSelected) || (runState == Topiary::Stopped))
+		// the || runState is needed because we may need to re-set a waiting variation to non-waiting; in that case we want the update to happen otherwise the buttons stays orange
+	{
 		variationSelected = n;
 		if (runState == Topiary::Stopped)  // otherwise the switch will be done when running depending on the variation switch Q
 			variationRunning = n;
@@ -303,12 +318,7 @@ void TOPIARYMODEL::setVariation(int n)
 		broadcaster.sendActionMessage(MsgVariationSelected);  // if the editor is there it will pick up the change in variation	
 	}
 
-#ifdef PRESETZ
-	if ((runState != Topiary::Running) && variation[variationSelected].enabled)
-		// we ALWAYS do this - even if the variation does not change (because we may wanna hit the variation button to reset it (presetz)
-		// so even if WFFN is on - as long as we are waiting wo do an immediate output of the variation settings!
-		outputVariationEvents(); // output the variation preset values!
-#endif
+
 } // setVariation
 
 ///////////////////////////////////////////////////////////////////////
@@ -942,6 +952,16 @@ void TOPIARYMODEL::generateMidi(MidiBuffer* midiBuffer, MidiBuffer* recBuffer)
 						Log("Ended ---------------------------------------", Topiary::LogType::Variations);
 						variation[variationRunning].ended = true;
 						rtCursor = rtCursorTo; // prevent next if to pass so nothing further is generated
+#ifdef PRESETZ
+						// now we must restore stuff to not running
+						if (fakeRun)
+						{
+							fakeRun = false;
+							setRunState(rememberFakeRunState);
+							broadcaster.sendActionMessage(MsgTransport); 
+							variationStartQ = rememberVariationStartQ;
+						}
+#endif
 					}
 					else if (runState == Topiary::Ending)
 					{

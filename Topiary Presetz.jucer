@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<JUCERPROJECT id="so1YrE" name="Topiary Presetz" projectType="audioplug" version="1.0.2"
+<JUCERPROJECT id="so1YrE" name="Topiary Presetz" projectType="audioplug" version="1.1.0"
               companyName="Topiary" pluginManufacturer="Topiary" pluginVSTCategory="kPlugCategGenerator"
-              pluginManufacturerCode="Tpry" pluginCode="Tpry" pluginCharacteristicsValue="pluginIsMidiEffectPlugin,pluginIsSynth,pluginProducesMidiOut,pluginWantsMidiIn"
+              pluginManufacturerCode="Tpry" pluginCode="Prst" pluginCharacteristicsValue="pluginIsMidiEffectPlugin,pluginIsSynth,pluginProducesMidiOut,pluginWantsMidiIn"
               splashScreenColour="Light" pluginFormats="buildStandalone,buildVST"
-              pluginVST3Category="Fx,Generator" jucerFormatVersion="1">
+              pluginVST3Category="Fx,Generator" jucerFormatVersion="1" pluginDesc="Topiary Presetz">
   <MAINGROUP id="MiVGXn" name="Topiary Presetz">
     <FILE id="SRnwlH" name="TopiaryKeytracker.cpp" compile="1" resource="0"
           file="../Topiary/Source/Model/TopiaryKeytracker.cpp"/>

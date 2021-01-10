@@ -43,8 +43,6 @@ TopiaryPresetzComponent::~TopiaryPresetzComponent()
 {	
 }
 
-
-
 /////////////////////////////////////////////////////////////////////////
 
 void TopiaryPresetzComponent::resized()

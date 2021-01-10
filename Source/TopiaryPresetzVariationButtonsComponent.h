@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 /*
-This file is part of Topiary Presetz, Copyright Tom Tollenaere 2018-2019.
+This file is part of Topiary Presetz, Copyright Tom Tollenaere 2018-2021.
 
 Topiary Presetz is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -23,21 +23,3 @@ along with Topiary Presetz. If not, see <https://www.gnu.org/licenses/>.
 #define TOPIARYVARIATIONBUTTONSCOMPONENT TopiaryPresetzVariationButtonsComponent
 #include "../../Topiary/Source/Components/TopiaryVariationButtonsComponent.h"
 
-/*
-class TopiaryPresetzVariationButtonsComponent : public TopiaryVariationButtonsComponent
-{
-public:
-	TopiaryPresetzVariationButtonsComponent();
-	~TopiaryPresetzVariationButtonsComponent();
-	void setModel(TopiaryPresetzModel *m);
-	void checkModel();
-	void updateToggleState(TextButton*) override;
-	void getEnabled();     // get enablement data from model and enable/disable buttons
-
-private:
-	TopiaryPresetzModel* presetzModel;
-	
-	JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(TopiaryPresetzVariationButtonsComponent)
-
-};
-*/

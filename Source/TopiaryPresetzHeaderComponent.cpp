@@ -99,11 +99,11 @@ void TopiaryPresetzHeaderComponent::actionListenerCallback(const String &message
 	{
 		if (message.compare(MsgVariationSelected) == 0)
 			variationButtonsComponent.checkModel();
-		if (message.compare(MsgTransport) == 0)
+		else if (message.compare(MsgTransport) == 0)
 			transportComponent.checkModel();
-		if (message.compare(MsgVariationEnables) == 0)
+		else if (message.compare(MsgVariationEnables) == 0)
 			variationButtonsComponent.getEnabled();
-		if (message.compare(MsgLog) == 0)
+		else if (message.compare(MsgLog) == 0)
 			warningEditor.setVisible(false); 
 	}
 

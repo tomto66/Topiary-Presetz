@@ -516,14 +516,15 @@ void TopiaryPresetzModel::generateTransition()
 
 	if (transitionTiming == Topiary::Quantization::Measure)
 		length = Topiary::TicksPerQuarter * numerator;
-	if (transitionTiming == Topiary::Quantization::Half)
+	else if (transitionTiming == Topiary::Quantization::Half)
 		length = Topiary::TicksPerQuarter * 2;
-	if (transitionTiming == Topiary::Quantization::Quarter)
+	else if (transitionTiming == Topiary::Quantization::Quarter)
 		length = Topiary::TicksPerQuarter;
-	if (transitionTiming == Topiary::Quantization::Immediate)
+	else if (transitionTiming == Topiary::Quantization::Immediate)
 		length = (int) Topiary::TicksPerQuarter/16;
+	else
+		jassert(false);
 
-	jassert((transitionTiming == Topiary::Quantization::Measure) || (transitionTiming == Topiary::Quantization::Quarter) || (transitionTiming == Topiary::Quantization::Half)  || (transitionTiming == Topiary::Quantization::Immediate));
 	// others not implemented (yet)
 	
 	for (int p = 0; p < PRESETELEMENTS; p++)
@@ -799,6 +800,17 @@ void TopiaryPresetzModel::getVariationNames(String vNames[8])
 	}
 } // getVariationNames
 
+/////////////////////////////////////////////////////////////////////////////
+
+void TopiaryPresetzModel::setAllTransitionTimes(int transitionTime)
+{
+	for (int v = 0; v < 8; v++)
+		variation[v].timing = transitionTime;
+
+	Log("Transition times are now the same in all variations.", Topiary::LogType::Warning);
+
+} // setAllTransitionTimes
 
 /////////////////////////////////////////////////////////////////////////////
+
 #include "../../Topiary/Source/Components/TopiaryMidiLearnEditor.cpp.h"

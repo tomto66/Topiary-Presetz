@@ -386,7 +386,7 @@ void TopiaryModel::setRunState(int n)
 {
 	jassert(false);
 	// only call with false when called from generateMidi - because there we already have the lock!
-
+	/*
 	int remember;
 	remember = runState;  // needed because in 1 case setting to Armed should fail!!!
 	bool varEnabled = false;
@@ -490,7 +490,7 @@ void TopiaryModel::setRunState(int n)
 	// now the first waiting variation might stil be orange; fix that below
 	if (remember == Topiary::Armed)
 		setVariation(variationSelected);
-
+		*/
 } // setRunState
 
 ///////////////////////////////////////////////////////////////////////
@@ -516,7 +516,7 @@ void TopiaryModel::processTransportControls(int buttonEnabled)  // buttonEnabled
 		{
 			setRunState(Topiary::Armed);  // if override then either processblock will switch it to Running asap, or processblock will set it to Running at first note 
 			// else do nothing otherwise it would restart!	
-			broadcaster.sendActionMessage(MsgTransport);
+			//broadcaster.sendActionMessage(MsgTransport);
 		}
 	}
 	else
@@ -526,7 +526,7 @@ void TopiaryModel::processTransportControls(int buttonEnabled)  // buttonEnabled
 			if (runState == Topiary::Armed)
 			{
 				setRunState(Topiary::Stopped);  // because then it never got started in the first place
-				broadcaster.sendActionMessage(MsgTransport);
+				//broadcaster.sendActionMessage(MsgTransport);
 				return;
 			}
 			else
@@ -534,12 +534,12 @@ void TopiaryModel::processTransportControls(int buttonEnabled)  // buttonEnabled
 				if (runState == Topiary::Running)
 				{
 					setRunState(Topiary::Ending);  // it will go to Stopped in processblock, when the time has come (depending on runStopQ)
-					broadcaster.sendActionMessage(MsgTransport);
+					//broadcaster.sendActionMessage(MsgTransport);
 				}
 				else
 				{
 					setRunState(Topiary::Stopped);
-					broadcaster.sendActionMessage(MsgTransport);
+					//broadcaster.sendActionMessage(MsgTransport);
 				}
 				return;
 			}
@@ -578,7 +578,8 @@ void TopiaryModel::setStartTimes()
 { // time in samples when running really starts + other housekeeping
 	//rtCursor = 0;
 	blockCursor = 0;
-	variationRunning = variationSelected;
+
+	//variationRunning = variationSelected;
 	//for (int i = 0; i < 4; i++)
 	//	for (int j = 0; j < 8; j++)
 	//	{
