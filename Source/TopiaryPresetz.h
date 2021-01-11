@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 /*
-This file is part of Topiary Presetz, Copyright Tom Tollenaere 2018-2019.
+This file is part of Topiary Presetz, Copyright Tom Tollenaere 2018-2021.
 
 Topiary Presetz is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -23,6 +23,6 @@ along with Topiary Presetz. If not, see <https://www.gnu.org/licenses/>.
 #define TOPIARYUTILITYCOMPONENT TopiaryPresetzUtilityComponent
 #define TOPIARYTRANSPORTCOMPONENT TopiaryPresetzTransportComponent
 
-#define MAXVARIATIONITEMS 120
+#define MAXVARIATIONITEMS 600
 #define PRESETELEMENTS 12
 #define TRANSITIONSTEPS (int)(MAXVARIATIONITEMS/PRESETELEMENTS)
