@@ -2,7 +2,7 @@
 
 Topiary Presetz is a plugin that allows the user to define 8 sets of "mix settings", and apply those at the touch of a button. Transition from one setting to another can be quantized and timed relative to the (host) transport.
 
-* Topiary Presetz folder contains the code and a projucer file.
+* Topiary Presetz folder contains the code and a projucer file
 * Topiary folder contains code used by other Topiary modules; code is duplicated to make it easy for you :).
 
 ## Compile yourself
